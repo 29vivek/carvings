@@ -2,6 +2,7 @@ import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/dialog_service.dart';
 import 'package:carvings/services/localstorage_service.dart';
 import 'package:carvings/services/navigation_service.dart';
+import 'package:carvings/services/web_service.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;
@@ -12,6 +13,9 @@ Future<void> setupLocator() async {
 
   var instance = await LocalStorageService.getInstance();
   locator.registerSingleton(instance);
+
+  var webServiceInstance = WebService.getInstance();
+  locator.registerSingleton(webServiceInstance);
 
   locator.registerLazySingleton(() => AuthenticationService());
 

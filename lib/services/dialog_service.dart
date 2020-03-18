@@ -4,6 +4,7 @@ import 'package:carvings/models/dialog_models.dart';
 import 'package:flutter/cupertino.dart';
 
 class DialogService {
+  
   GlobalKey<NavigatorState> _dialogNavigatorKey = GlobalKey<NavigatorState>();
   Function(DialogRequest) _showDialogListener;
   Completer<DialogResponse> _dialogCompleter;
@@ -50,7 +51,5 @@ class DialogService {
     _dialogCompleter.complete(response);
     _dialogCompleter = null;
   }
-
-
 
 }

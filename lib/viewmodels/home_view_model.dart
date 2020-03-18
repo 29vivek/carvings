@@ -1,5 +1,5 @@
 import 'package:carvings/locator.dart';
-import 'package:carvings/services/localstorage_service.dart';
+import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/viewmodels/base_model.dart';
 
 class HomeViewModel extends BaseModel {
@@ -9,7 +9,7 @@ class HomeViewModel extends BaseModel {
   String _role = '';
   String get role  => _role;
 
-  LocalStorageService _storageService = locator<LocalStorageService>();
+  AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   void changeTab(int index) {
     _index = index;
@@ -17,8 +17,7 @@ class HomeViewModel extends BaseModel {
   }
 
   void findRole() {
-    _role = _storageService.user.role;
-    print(_role);
+    _role = _authenticationService.currentUser.role;
   }
 
 }

@@ -11,7 +11,6 @@ class LoginView extends StatelessWidget {
   
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<LoginViewModel>.withConsumer(

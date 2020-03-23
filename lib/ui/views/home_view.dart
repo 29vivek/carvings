@@ -21,7 +21,7 @@ class HomeView extends StatelessWidget {
   ];
 
   final _adminViews = [
-
+    
   ];
 
   @override
@@ -37,50 +37,27 @@ class HomeView extends StatelessWidget {
           itemBuilder: (_, index) => model.role == 'User' ? _userViews[index] : _adminViews[index],
         ),
         bottomNavBar: PlatformNavBar(
+          android: (_) => MaterialNavBarData(
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+          ),
           currentIndex: model.index,
           items: <BottomNavigationBarItem> [
             BottomNavigationBarItem(
-              icon: PlatformWidget(
-                android: (_) => FaIcon(FontAwesomeIcons.utensilSpoon, color: Colors.grey[600],),
-                ios: (_) => FaIcon(FontAwesomeIcons.utensilSpoon, color: Colors.grey[600],),
-              ),
-              activeIcon: PlatformWidget(
-                android: (_) => FaIcon(FontAwesomeIcons.utensilSpoon, color: Theme.of(context).primaryColor),
-                ios: (_) => FaIcon(FontAwesomeIcons.utensilSpoon, color: Theme.of(context).primaryColor,),
-              ),
+              icon: FaIcon(FontAwesomeIcons.utensils),
               title: NoteText('Browse'),
             ),
             BottomNavigationBarItem(
-              icon: PlatformWidget(
-                android: (_) => FaIcon(FontAwesomeIcons.search, color: Colors.grey[600],),
-                ios: (_) => FaIcon(FontAwesomeIcons.search, color: Colors.grey[600],),
-              ),
-              activeIcon: PlatformWidget(
-                android: (_) => FaIcon(FontAwesomeIcons.search, color: Theme.of(context).primaryColor),
-                ios: (_) => FaIcon(FontAwesomeIcons.search, color: Theme.of(context).primaryColor,),
-              ),
+              icon: FaIcon(FontAwesomeIcons.search,),
               title: NoteText('Search'),
             ),
             BottomNavigationBarItem(
-              icon: PlatformWidget(
-                android: (_) => Icon(Icons.shopping_cart, color: Colors.grey[600],),
-                ios: (_) => Icon(CupertinoIcons.shopping_cart, color: Colors.grey[600],),
-              ),
-              activeIcon: PlatformWidget(
-                android: (_) => Icon(Icons.shopping_cart, color: Theme.of(context).primaryColor),
-                ios: (_) => Icon(CupertinoIcons.shopping_cart, color: Theme.of(context).primaryColor),
-              ),
+              icon: FaIcon(FontAwesomeIcons.shoppingBasket,),
               title: NoteText('Cart'),
             ),
             BottomNavigationBarItem(
-              icon: PlatformWidget(
-                android: (_) => Icon(Icons.person, color: Colors.grey[600],),
-                ios: (_) => Icon(CupertinoIcons.person, color: Colors.grey[600],),
-              ),
-              activeIcon: PlatformWidget(
-                android: (_) => Icon(Icons.person, color: Theme.of(context).primaryColor),
-                ios: (_) => Icon(CupertinoIcons.person, color: Theme.of(context).primaryColor),
-              ),
+              icon: FaIcon(FontAwesomeIcons.userAlt,),
               title: NoteText('Profile'),
             ),
           ],

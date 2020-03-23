@@ -41,5 +41,5 @@ PageRoute _getPageRoute({String routeName, Widget viewToShow}) {
       settings: RouteSettings(
         name: routeName,
       ),
-      builder: (_) => viewToShow);
+      builder: (_) => SafeArea(child: viewToShow));
 }

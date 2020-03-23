@@ -10,8 +10,8 @@ class AuthenticationService {
   final LocalStorageService _storageService = locator<LocalStorageService>();
   final WebService _webService = locator<WebService>();
 
-  User _currentUser;
-  User get currentUser => _currentUser;
+  User _user;
+  User get currentUser => _user;
 
   Future loginWithEmail({@required String email, @required String password}) async {
     var data = await _webService.performPostRequest(
@@ -23,8 +23,8 @@ class AuthenticationService {
     } else if(data['code'] == '0') {
       return data['message'];
     } else {
-      _currentUser = User.fromData(data);
-      _storageService.user = _currentUser;
+      _user = User.fromData(data);
+      _storageService.user = _user;
       return true;
     }
     
@@ -50,22 +50,39 @@ class AuthenticationService {
     } else if(data['code'] == '0') {
       return data['message'];
     } else {
-      _currentUser = User(id: data['UserID'], email: email, name: name, number: number, role: 'User');
-      _storageService.user = _currentUser;
+      _user = User(id: data['UserID'], email: email, name: name, number: number, role: 'User');
+      _storageService.user = _user;
       return true;
     }
 
   }
 
   bool hasUserLoggedIn() {
-    _currentUser =  _storageService.user;
-    return _currentUser != null;
+    _user =  _storageService.user;
+    return _user != null;
   }
 
   bool logout() {
     _storageService.deleteUser();
-    _currentUser = null;
     return true;
+  }
+
+  Future editUserDetails({
+    String email, String name, String number
+  }) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/editdetails.php',
+      formData: {'email': email, 'name': name, 'number': number},
+    );
+    if(data is String) {
+      return data;
+    } else if(data['code'] == '0') {
+      return data['message'];
+    } else {
+      _user = User.fromData(data);
+      _storageService.user = _user;
+      return true;
+    }
   }
 
 }

@@ -18,6 +18,7 @@ class HomeViewModel extends BaseModel {
 
   void findRole() {
     _role = _authenticationService.currentUser.role;
+    notifyListeners();
   }
 
 }

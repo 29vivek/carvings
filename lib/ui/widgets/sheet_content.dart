@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:carvings/ui/shared/ui_helpers.dart';
 
 class SheetContent extends StatelessWidget {
   
@@ -12,7 +13,7 @@ class SheetContent extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+          padding: defaultPadding(context),
           child: child,
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/busy_button.dart';
 import 'package:carvings/ui/widgets/input_field.dart';
 import 'package:carvings/ui/widgets/text_link.dart';
@@ -16,8 +17,9 @@ class LoginView extends StatelessWidget {
     return ViewModelProvider<LoginViewModel>.withConsumer(
       viewModel: LoginViewModel(),
       builder: (context, model, child) => PlatformScaffold(
+        backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.all(50),
+          padding: defaultPadding(context),
           child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +27,7 @@ class LoginView extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Carvings',
-                  style: TextStyle(fontSize: 38),
+                  style: headerTextStyle,
                 ),
                 verticalSpaceLarge,
                 InputField(

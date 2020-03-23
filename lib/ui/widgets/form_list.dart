@@ -1,3 +1,4 @@
+import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/busy_button.dart';
 import 'package:carvings/ui/widgets/input_field.dart';
 import 'package:flutter/widgets.dart';
@@ -62,7 +63,7 @@ class _FormListState extends State<FormList> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(widget.title, style: TextStyle(fontSize: 22),),
+        Text(widget.title, style: subHeaderTextStyle,),
         verticalSpaceMedium,
         ..._nonEditableTexts,
         ..._editableTexts,

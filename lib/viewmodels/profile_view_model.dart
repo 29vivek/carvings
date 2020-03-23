@@ -1,5 +1,6 @@
 import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
+import 'package:carvings/models/dialog_models.dart';
 import 'package:carvings/models/user.dart';
 import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/dialog_service.dart';
@@ -15,34 +16,29 @@ class ProfileViewModel extends BaseModel {
   User _user;
   User get user => _user;
 
-  bool _canBeSaved = false;
-  get canBeSaved => _canBeSaved;
-
   void getUser() {
     _user = _authenticationService.currentUser;
   }
 
-  String _selectedFilter = 'All';
+
+  String _selectedFilter = 'Today';
   String get selectedFilter => _selectedFilter;
 
 
-  void logout() {
+  void logout() async {
 
-    _dialogService.showConfirmationDialog(
+    DialogResponse response = await _dialogService.showConfirmationDialog(
       title: 'Do you want to log out?',
       description: 'You\'ll have to log back in.',
       confirmationTitle: 'Yes',
       cancelTitle: 'I changed my mind',
-    ).then((response) {
-        if(response.confirmed) {
-          setBusy(true);
-          var result = _authenticationService.logout();
-          setBusy(false);
-          if(result) {
-            _navigationService.popAllAndNavigateTo(LoginViewRoute);
-          }
-        }
-      });
+    );
+    if(response.confirmed) {
+      var result = _authenticationService.logout();
+      if(result) {
+        _navigationService.popAllAndNavigateTo(LoginViewRoute);
+      }
+    }
 
   }
 
@@ -51,22 +47,40 @@ class ProfileViewModel extends BaseModel {
     notifyListeners();
   }
 
-  void saveDetails(String newName, String newNumber) {
+  void saveDetails(String newName, String newNumber) async {
+    
+    setBusy(true);
+
     if(newNumber != '' && newNumber.length != 10) {
-      _dialogService.showDialog(
+      await _dialogService.showDialog(
         title: 'Error occurred!',
         description: 'Fill in details as required.'
       );
+    } else if(newName == '' && newNumber == '') {
+      await _dialogService.showDialog(
+        title: 'Error occurred!',
+        description: 'No fields changed to update.'
+      );
+    } else {
+      var result = await _authenticationService.editUserDetails(email: _user.email, name: newName, number: newNumber);
+      if(result is bool) {
+        if(result) {
+          getUser();
+          setBusy(false);
+          _navigationService.goBack();
+          return;
+        }
+      }
+      else {
+        _dialogService.showDialog(
+            title: 'Error occured!',
+            description: result,
+        );
+      }
     }
-  }
 
-  void couldBeSaved(String s) {
-    if(s == '')
-      _canBeSaved = false;
-    else
-      _canBeSaved = true;
+    setBusy(false);
     
-    notifyListeners();
   }
 
 }

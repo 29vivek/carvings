@@ -1,3 +1,4 @@
+import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/busy_button.dart';
 import 'package:carvings/ui/widgets/input_field.dart';
 import 'package:carvings/viewmodels/signup_view_model.dart';
@@ -18,6 +19,7 @@ class SignUpView extends StatelessWidget {
     return ViewModelProvider<SignUpViewModel>.withConsumer(
       viewModel: SignUpViewModel(),
       builder: (context, model, child) => PlatformScaffold(
+        backgroundColor: Colors.white,
         body: LayoutBuilder(
           builder: (context, viewPortConstraints) => SingleChildScrollView(
             child: ConstrainedBox(
@@ -25,7 +27,7 @@ class SignUpView extends StatelessWidget {
                 minHeight: viewPortConstraints.maxHeight,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(50),
+                padding: defaultPadding(context),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +35,7 @@ class SignUpView extends StatelessWidget {
                   children: <Widget>[
                     Text(
                         'Sign Up',
-                        style: TextStyle(fontSize: 38),
+                        style: headerTextStyle,
                     ),
                     verticalSpaceLarge,
                     InputField(

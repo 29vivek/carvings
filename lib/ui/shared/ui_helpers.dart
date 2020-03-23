@@ -36,3 +36,14 @@ double halfScreenWidth(BuildContext context) =>
 
 double thirdScreenWidth(BuildContext context) =>
     screenWidthFraction(context, dividedBy: 3);
+
+double thirdScreenHeight(BuildContext context) =>
+    screenHeightFraction(context, dividedBy: 3);
+
+EdgeInsets defaultPadding(context) =>  EdgeInsets.symmetric(
+      horizontal: screenWidthFraction(context, dividedBy: 10),
+      vertical: screenWidthFraction(context, dividedBy: 15),
+    );
+
+double tenthScreenWidth(BuildContext context) =>
+    screenWidthFraction(context, dividedBy: 10);

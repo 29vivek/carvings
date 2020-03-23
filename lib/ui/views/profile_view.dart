@@ -1,3 +1,4 @@
+import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/busy_button.dart';
 import 'package:carvings/ui/widgets/expansion_list.dart';
 import 'package:carvings/ui/widgets/form_list.dart';
@@ -21,66 +22,79 @@ class ProfileView extends StatelessWidget {
       viewModel: ProfileViewModel(),
       onModelReady: (model) => model.getUser(),
       builder: (context, model, child) => PlatformScaffold(
+        backgroundColor: Colors.white,
         body: Padding(
-          padding: EdgeInsets.all(50.0),
+          padding: defaultPadding(context),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Profile',
-                style: TextStyle(fontSize: 38),
+              Text(
+                'Profile',
+                style: headerTextStyle,
               ),
-              NoteText('${model.user.email}'),
-              NoteText('${model.user.name}'),
-              NoteText('${model.user.number}'),
-              NoteText('${model.user.role}'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  BusyButton(
-                    title: 'Edit', 
-                    onPressed: () => showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return SheetContent(
-                          child: FormList(
-                            title: 'Your Details',
-                            nonEditables: [model.user.email, model.user.role],
-                            editables: [
-                              InputField(
-                                controller: nameController,
-                                placeholder: model.user.name,
-                                textInputType: TextInputType.text,
-                                onChanged: (String s) => model.couldBeSaved(s),
-                              ),
-                              InputField(
-                                controller: numberController,
-                                placeholder: model.user.number,
-                                textInputType: TextInputType.number,
-                                additionalNote: 'Enter a 10 digit phone number',
-                                onChanged: (String s) => model.couldBeSaved(s),
-                              )
-                            ],
-                            button: BusyButton(
-                              title: 'Save',
-                              busy: model.busy,
-                              onPressed: () => model.saveDetails(nameController.text, numberController.text),
-                              enabled: model.canBeSaved,
-                            ),  
-                          )
-                        );
-                      },
+              Container(
+                decoration: fieldDecoration,
+                padding: largeFieldPadding,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    NoteText('${model.user.email}'),
+                    NoteText('${model.user.name}'),
+                    NoteText('${model.user.number}'),
+                    NoteText('${model.user.role}'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        BusyButton(
+                          title: 'Edit', 
+                          onPressed: () => showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return SheetContent(
+                                child: FormList(
+                                  title: 'Edit Your Details',
+                                  nonEditables: [model.user.email, model.user.role],
+                                  editables: [
+                                    InputField(
+                                      controller: nameController,
+                                      placeholder: model.user.name,
+                                      textInputType: TextInputType.text,
+                                    ),
+                                    InputField(
+                                      controller: numberController,
+                                      placeholder: model.user.number,
+                                      textInputType: TextInputType.number,
+                                      additionalNote: 'Enter a 10 digit phone number',
+                                    )
+                                  ],
+                                  button: BusyButton(
+                                    title: 'Save',
+                                    busy: model.busy,
+                                    onPressed: () {
+                                      model.saveDetails(nameController.text, numberController.text);
+                                      nameController.clear();
+                                      numberController.clear();
+                                    }
+                                  ),  
+                                )
+                              );
+                            },
+                          ),
+                        ),
+                        horizontalSpaceSmall,
+                        BusyButton(title: 'Logout', onPressed: () => model.logout()),
+                      ],
                     ),
-                  ),
-                  horizontalSpaceSmall,
-                  BusyButton(title: 'Logout', onPressed: () => model.logout())
-                ],
+                  ],
+                ),
               ),
               verticalSpaceLarge,
               Text('History',
-                style: TextStyle(fontSize: 38)
+                style: headerTextStyle,
               ),
               verticalSpaceSmall,
               ExpansionList<String>(

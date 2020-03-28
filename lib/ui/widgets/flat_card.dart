@@ -23,46 +23,47 @@ class FlatCard extends StatefulWidget {
 class _FlatCardState extends State<FlatCard> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onPressed,
-      child: InkWell(
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: massiveFieldPadding,
-          decoration: fieldDecoration,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                flex: 4,
-                fit: FlexFit.tight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(widget.title, style: subHeaderTextStyle),
-                    verticalSpaceMedium,
-                    Text(widget.description, style: infoTextStyle),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: FaIcon(
-                    FontAwesomeIcons.angleRight,
-                    size: 20,
-                    color: Colors.grey[700],
+    return Material(
+      elevation: 2,
+      child: Ink(
+        decoration: fieldDecoration,
+        child: InkWell(
+          onTap: widget.onPressed,
+          child: Padding(
+            padding: massiveFieldPadding,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  flex: 4,
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(widget.title, style: subHeaderTextStyle),
+                      verticalSpaceMedium,
+                      Text(widget.description, style: infoTextStyle),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: FaIcon(
+                      FontAwesomeIcons.angleRight,
+                      size: 20,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-      
     );
   }
 }

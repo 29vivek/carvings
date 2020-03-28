@@ -2,6 +2,7 @@ import 'package:carvings/locator.dart';
 import 'package:carvings/models/dialog_models.dart';
 import 'package:carvings/services/dialog_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DialogManager extends StatefulWidget {
 
@@ -32,26 +33,20 @@ class _DialogManagerState extends State<DialogManager> {
 
   void _showDialog(DialogRequest request) {
     var isConfirmationDialog = request.cancelTitle != null;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-          title: Text(request.title),
-          content: Text(request.description),
-          actions: <Widget>[
-            if(isConfirmationDialog)
-              FlatButton(
-                child: Text(request.cancelTitle),
-                onPressed: () {
-                  _dialogService.dialogComplete(DialogResponse(confirmed: false));
-                },
-              ),
-            FlatButton(
-              child: Text(request.buttonTitle),
-              onPressed: () {
-                _dialogService.dialogComplete(DialogResponse(confirmed: true));
-              },
-            ),
-          ],
+    Get.defaultDialog(
+      title: request.title,
+      content: Text(request.description),
+      cancel: isConfirmationDialog ? FlatButton(
+        child: Text(request.cancelTitle),
+        onPressed: () {
+          _dialogService.dialogComplete(DialogResponse(confirmed: false));
+        },
+      ) : null,
+      confirm: FlatButton(
+        child: Text(request.buttonTitle),
+        onPressed: () {
+          _dialogService.dialogComplete(DialogResponse(confirmed: true));
+        },
       ),
     );
   }

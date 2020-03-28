@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NavigationService {
   final GlobalKey<NavigatorState> navigatorKey =
-      new GlobalKey<NavigatorState>();
+      Get.key;
 
   Future<dynamic> navigateTo(String routeName, {dynamic arguments}) {
-    return navigatorKey.currentState.pushNamed(routeName, arguments: arguments);
+    return Get.toNamed(routeName, arguments: arguments);
   }
 
   bool goBack() {
-    return navigatorKey.currentState.pop();
+    return Get.back();
   }
 
   Future<dynamic> popAllAndNavigateTo(String routeName, {dynamic arguments}) {
-    return navigatorKey.currentState.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: arguments);
+    return Get.offAllNamed(routeName, predicate: (_) => false, arguments: arguments);
   }
   
 }

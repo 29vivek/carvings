@@ -25,11 +25,15 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.9
   get_it: ^4.0.0
+  get: ^1.11.1
   provider_architecture: ^1.0.6
   flutter_platform_widgets: ^0.32.4
   shared_preferences: ^0.5.6+3
   font_awesome_flutter: ^8.7.0
-
+  # for local database
+  sqflite: ^1.3.0
+  path_provider: ^1.6.5
+  path: ^1.6.4
 
 dev_dependencies:
   flutter_test:

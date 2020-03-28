@@ -1,12 +1,12 @@
 import 'package:carvings/locator.dart';
+import 'package:carvings/managers/bottomsheet_manager.dart';
 import 'package:carvings/managers/dialog_manager.dart';
-import 'package:carvings/services/dialog_service.dart';
-import 'package:carvings/services/navigation_service.dart';
 import 'package:carvings/ui/router.dart';
 import 'package:carvings/ui/views/startup_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 
 Future<void> main() async {
   try {
@@ -37,13 +37,15 @@ class MyApp extends StatelessWidget {
         ),
       ),
       builder: (context, child) => Navigator(
-        key: locator<DialogService>().dialogNavigatorKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
-          builder: (context) => DialogManager(child: child),
+        onGenerateRoute: (settings) => platformPageRoute(
+          context: context,
+          builder: (context) => DialogManager(
+            child: BottomSheetManager(child: child)
+          ),
         ),
       ),
       title: 'Carvings',
-      navigatorKey: locator<NavigationService>().navigatorKey,
+      navigatorKey: Get.key,
       home: StartUpView(),
       onGenerateRoute: generateRoute,
     );

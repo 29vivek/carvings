@@ -1,8 +1,10 @@
 import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
+import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/dialog_models.dart';
 import 'package:carvings/models/user.dart';
 import 'package:carvings/services/authentication_service.dart';
+import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/dialog_service.dart';
 import 'package:carvings/services/navigation_service.dart';
 import 'package:carvings/viewmodels/base_model.dart';
@@ -11,6 +13,7 @@ class ProfileViewModel extends BaseModel {
 
   AuthenticationService _authenticationService = locator<AuthenticationService>();
   DialogService _dialogService = locator<DialogService>();
+  BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   NavigationService _navigationService = locator<NavigationService>();
 
   User _user;
@@ -18,6 +21,7 @@ class ProfileViewModel extends BaseModel {
 
   void getUser() {
     _user = _authenticationService.currentUser;
+    notifyListeners();
   }
 
 
@@ -46,29 +50,31 @@ class ProfileViewModel extends BaseModel {
     _selectedFilter = filter;
     notifyListeners();
   }
-
-  void saveDetails(String newName, String newNumber) async {
+  
+  void editDetails() async {
     
-    setBusy(true);
-
-    if(newNumber != '' && newNumber.length != 10) {
+    SheetResponse response = await _bottomSheetService.showEditSheet(
+      title: 'Edit your Details',
+      placeholderOne: _user.name,
+      placeholderTwo: _user.number,
+    );
+    
+    if(response.fieldTwo != '' && response.fieldTwo.length != 10) {
       await _dialogService.showDialog(
         title: 'Error occurred!',
         description: 'Fill in details as required.'
       );
-    } else if(newName == '' && newNumber == '') {
+    } else if(response.fieldOne == '' && response.fieldTwo == '') {
       await _dialogService.showDialog(
         title: 'Error occurred!',
         description: 'No fields changed to update.'
       );
     } else {
-      var result = await _authenticationService.editUserDetails(email: _user.email, name: newName, number: newNumber);
+      var result = await _authenticationService.editUserDetails(email: _user.email, name: response.fieldOne, number: response.fieldTwo);
       if(result is bool) {
         if(result) {
           getUser();
-          setBusy(false);
-          _navigationService.goBack();
-          return;
+          notifyListeners();
         }
       }
       else {
@@ -79,8 +85,6 @@ class ProfileViewModel extends BaseModel {
       }
     }
 
-    setBusy(false);
-    
   }
 
 }

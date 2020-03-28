@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:carvings/models/dialog_models.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 class DialogService {
   
-  GlobalKey<NavigatorState> _dialogNavigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> _dialogNavigatorKey = Get.key;
   Function(DialogRequest) _showDialogListener;
   Completer<DialogResponse> _dialogCompleter;
 
@@ -47,7 +48,7 @@ class DialogService {
 
   /// Completes the _dialogCompleter to resume the Future's execution call
   void dialogComplete(DialogResponse response) {
-    _dialogNavigatorKey.currentState.pop();
+    Get.back();
     _dialogCompleter.complete(response);
     _dialogCompleter = null;
   }

@@ -16,7 +16,6 @@ class WebService {
       _dio = Dio();
       _dio.options.baseUrl = 'http://$HomeWiFi/carvings';
       _dio.options.responseType = ResponseType.json;
-      _dio.options.method = 'POST';
     }
     return _instance;
   }
@@ -35,6 +34,21 @@ class WebService {
       return e.message;
     }
   } 
+
+  Future performGetRequest({String endPoint}) async {
+    try {
+      Response response = await _dio.get(endPoint).timeout(Duration(seconds: 5));
+      if(response.statusCode == 200) {
+        return jsonDecode(response.data);
+      }
+      else {
+        return response.statusMessage;
+      }
+    } catch(e) {
+      print('Exception occured: ${e.message}');
+      return e.message;
+    }
+  }
   
 
 }

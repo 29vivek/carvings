@@ -8,6 +8,12 @@ BoxDecoration fieldDecoration = BoxDecoration(
 BoxDecoration disabledFieldDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(5), color: Colors.grey[100]);
 
+BoxDecoration gradientDecoration = BoxDecoration(
+    borderRadius: BorderRadius.circular(5),
+    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
+        colors: [Color.fromARGB(100, 51, 71, 158), Colors.black87]
+      ));
+
 // Field Variables
 
 const double fieldHeight = 55;
@@ -31,4 +37,4 @@ const TextStyle subHeaderTextStyle =
     const TextStyle(fontSize: 22, color: Colors.black87);
 
 TextStyle infoTextStyle = 
-    TextStyle(fontSize: 15, color: Colors.grey[600]);
+    TextStyle(fontSize: 14, color: Colors.grey[600]);

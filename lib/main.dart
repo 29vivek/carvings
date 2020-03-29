@@ -36,13 +36,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      builder: (context, child) => Navigator(
-        onGenerateRoute: (settings) => platformPageRoute(
-          context: context,
-          builder: (context) => DialogManager(
-            child: BottomSheetManager(child: child)
-          ),
-        ),
+      builder: (context, child) => DialogManager(
+        child: BottomSheetManager(child: child)
       ),
       title: 'Carvings',
       navigatorKey: Get.key,

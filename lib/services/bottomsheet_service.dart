@@ -1,16 +1,11 @@
 import 'dart:async';
 
 import 'package:carvings/models/bottomsheet_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class BottomSheetService {
-  GlobalKey<NavigatorState> _sheetNavigatorKey = Get.key;
   Function(SheetRequest) _showSheetListener;
   Completer<SheetResponse> _sheetCompleter;
-  
-
-  GlobalKey<NavigatorState> get sheetNavigatorKey => _sheetNavigatorKey;
 
   void registerSheetListener(Function(SheetRequest) showSheetListener) {
     _showSheetListener = showSheetListener;

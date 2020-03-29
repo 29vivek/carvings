@@ -15,7 +15,7 @@ class Food {
     : id = data['FoodID'],
       name = data['Name'],
       price = data['Price'],
-      availability = data['Availibility'] == 0 ? false : true,
+      availability = data['Availability'] > 0 ? true : false,
       rating = data['Rating'],
       numberRatings = data['NumberRatings'],
       category = data['Category'],

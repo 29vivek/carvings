@@ -14,10 +14,8 @@ class CanteenViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
 
   Map<String, List<Food>> _categorizedFood;
-  List<Food> _food;
-  bool _isCategorized = false;
 
-  dynamic get food => _isCategorized ? _categorizedFood : _food;
+  Map<String, List<Food>> get food => _categorizedFood;
 
   Canteen _canteen;
   Canteen get canteen => _canteen;
@@ -26,17 +24,14 @@ class CanteenViewModel extends BaseModel {
     
     _canteen = _foodService.canteens[canteenId - 1]; // nice litte hack #2
 
-    var result = await _foodService.getFoodItemsFor(canteenId: canteenId, categorized: _isCategorized);
+    var result = await _foodService.getFoodItemsFor(canteenId: canteenId);
     if(result is String) {
       await _dialogService.showDialog(title: 'Error Occurred!', description: result);
       // go back to browse view.
       _navigationService.goBack();
     } else {
       // got me my food (dabs)
-      if(_isCategorized)
-        _categorizedFood = result;
-      else 
-        _food = result;
+      _categorizedFood = result;
     }
     
     notifyListeners();

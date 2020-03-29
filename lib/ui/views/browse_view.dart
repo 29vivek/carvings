@@ -23,7 +23,7 @@ class BrowseView extends StatelessWidget {
               Text('Favourites', style: headerTextStyle,),
               verticalSpaceMedium,
               Text('Duh. Your favourites is empty!', style: infoTextStyle, textAlign: TextAlign.center,),
-              spacedDivider,
+              verticalSpaceMedium,
               model.canteens != null
               ? Expanded(
                 child: ListView.builder(

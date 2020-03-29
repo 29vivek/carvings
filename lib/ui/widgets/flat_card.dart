@@ -24,7 +24,8 @@ class _FlatCardState extends State<FlatCard> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 2,
+      elevation: 4,
+      type: MaterialType.card,
       child: Ink(
         decoration: fieldDecoration,
         child: InkWell(

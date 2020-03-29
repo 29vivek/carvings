@@ -38,3 +38,9 @@ const TextStyle subHeaderTextStyle =
 
 TextStyle infoTextStyle = 
     TextStyle(fontSize: 14, color: Colors.grey[600]);
+
+TextStyle emphasizedMediumStyle = 
+    TextStyle(fontSize: 16, color: Colors.grey[800], fontWeight: FontWeight.w700);
+
+TextStyle disabledMediumStyle = 
+    TextStyle(fontSize: 16, color: Colors.grey[500], fontWeight: FontWeight.w700);

@@ -1,16 +1,12 @@
 import 'dart:async';
 
 import 'package:carvings/models/dialog_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DialogService {
   
-  GlobalKey<NavigatorState> _dialogNavigatorKey = Get.key;
   Function(DialogRequest) _showDialogListener;
   Completer<DialogResponse> _dialogCompleter;
-
-  GlobalKey<NavigatorState> get dialogNavigatorKey => _dialogNavigatorKey;
 
   void registerDialogListener(Function(DialogRequest) showDialogListener) {
     _showDialogListener = showDialogListener;

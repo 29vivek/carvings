@@ -11,7 +11,7 @@ class FoodService {
   List<Canteen> _canteens;
   List<Canteen> get canteens => _canteens;
 
-  Future getFoodItemsFor({@required int canteenId, bool categorized = false}) async {
+  Future getFoodItemsFor({@required int canteenId}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/getfood.php',
       formData: {'canteenId': canteenId},
@@ -19,26 +19,16 @@ class FoodService {
     if(data is String) {
       return data;
     } else {
-      if(categorized) {
-        var categorizedFood = Map<String, List<Food>>();
-        for(var category in data['categories']) {
-          print('adding category: $category');
-          categorizedFood[category] = List<Food>();
-        }
-        for(var item in data['items']) {
-          print('item is $item');
-          categorizedFood[item['Category']].add(Food.fromData(item));
-        }
-        return categorizedFood;
-      } else {
-        var food = List<Food>();
-        for(var item in data['items']) {
-          print('item is $item');
-          food.add(Food.fromData(item));
-        }
-        return food;
+      var categorizedFood = Map<String, List<Food>>();
+      for(var category in data['categories']) {
+        // print('adding category: $category');
+        categorizedFood[category] = List<Food>();
       }
-    }
+      for(var item in data['items']) {
+        categorizedFood[item['Category']].add(Food.fromData(item));
+      }
+      return categorizedFood;
+    } 
   }
 
   Future getCanteenInfo() async {

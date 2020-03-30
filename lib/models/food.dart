@@ -28,6 +28,7 @@ class Food {
       'Price' : price,
       'Availability' : availability ? 1 : 0,
       'Rating' : rating,
+      'NumberRatings' : numberRatings,
       'Category' : category,
       'CanteenName' : canteenName,
     };

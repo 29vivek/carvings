@@ -41,21 +41,25 @@ class BrowseViewModel extends BaseModel {
   void getFavourites() async {
 
     var ids = await _databaseService.getFavouriteIds();
-    var availabilities = await _foodService.getAvailabilityForIds(ids: ids);
     
-    if(availabilities is String) {
-      _dialogService.showDialog(
-        title: 'Error occurred!',
-        description: availabilities // lol
-      );
-      return;
-    }
+    //to handle case where there is no favs
+    if(ids.isNotEmpty) {
+      var availabilities = await _foodService.getAvailabilityForIds(ids: ids);
     
-    await _databaseService.updateAvailabilities(ids, availabilities);
-    // to check if availability is changed from admin side, frequently
+      if(availabilities is String) {
+        _dialogService.showDialog(
+          title: 'Error occurred!',
+          description: availabilities // lol
+        );
+        return;
+      }
+      
+      await _databaseService.updateAvailabilities(ids, availabilities);
+      // to check if availability is changed from admin side, frequently
 
-    _favourites = null;
-    // to show flashy animation more often, isnt actually needed
+      _favourites = null;
+      // to show flashy animation more often, isnt actually needed
+    }
 
     setBusy(true);
 

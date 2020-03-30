@@ -19,7 +19,7 @@ class BottomSheetService {
     String confirmTitle = 'Done',
   }) {
     _sheetCompleter = Completer<SheetResponse>();
-    _showSheetListener(SheetEdit(
+    _showSheetListener(SheetRequest(
       title: title,
       placeholderOne: placeholderOne,
       placeholderTwo: placeholderTwo,
@@ -28,10 +28,22 @@ class BottomSheetService {
     return _sheetCompleter.future;
   }
 
-  Future<SheetResponse> showFoodSheet() {
+  Future<SheetResponse> showFoodSheet({
+    String title,
+    String subtitle,
+    String description,
+    int price = 0,
+    String rating = '0 stars based on 0 ratings.',
+    String confirmTitle = 'Add To Cart',
+  }) {
     _sheetCompleter = Completer<SheetResponse>();
-    _showSheetListener(SheetFood(
-      
+    _showSheetListener(SheetRequest(
+      title: title,
+      placeholderOne: subtitle,
+      placeholderTwo: description,
+      price: price,
+      rating: rating,
+      confirmTitle: confirmTitle,
     ));
     return _sheetCompleter.future;
   }

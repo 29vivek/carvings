@@ -1,5 +1,6 @@
 import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
+import 'package:carvings/services/database_service.dart';
 import 'package:carvings/services/dialog_service.dart';
 import 'package:carvings/services/food_service.dart';
 import 'package:carvings/services/localstorage_service.dart';
@@ -16,6 +17,9 @@ Future<void> setupLocator() async {
 
   var instance = await LocalStorageService.getInstance();
   locator.registerSingleton(instance);
+
+  var database = DatabaseService.instance;
+  locator.registerSingleton(database);
 
   var webServiceInstance = WebService.getInstance();
   locator.registerSingleton(webServiceInstance);

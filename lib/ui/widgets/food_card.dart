@@ -8,8 +8,9 @@ class FoodCard extends StatelessWidget {
 
   final Food food;
   final Function onPressed;
+  final Function onLongPressed;
 
-  FoodCard(this.food, this.onPressed);
+  FoodCard({@required this.food, this.onPressed, this.onLongPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class FoodCard extends StatelessWidget {
       child: Ink(
         decoration: food.availability ? fieldDecoration : disabledFieldDecoration,
         child: InkWell(
+          onLongPress: onLongPressed,
           onTap: food.availability ? onPressed : null,
           child: Padding(
             padding: largeFieldPadding,
@@ -26,22 +28,27 @@ class FoodCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Flexible(
-                  flex: 4, 
+                  flex: 3, 
                   fit: FlexFit.tight,
                   child: Text(food.name, style: food.availability ? emphasizedMediumStyle : disabledMediumStyle, overflow: TextOverflow.ellipsis, maxLines: 2,)
                 ),
                 Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight, 
-                  child: Text('₹${food.price.toString()}', style: food.availability ? emphasizedMediumStyle : disabledMediumStyle,)
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: NoteText(food.canteenName),
                 ),
                 Flexible(
-                  flex: 2,
+                  flex: 1,
+                  fit: FlexFit.tight, 
+                  child: Text('₹${food.price}', style: food.availability ? emphasizedMediumStyle : disabledMediumStyle,)
+                ),
+                Flexible(
+                  flex: 1,
                   fit: FlexFit.tight, 
                   child: StarRating(rating: food.rating, onRatingChanged: (i) => print(i),)
                 ),
                 Flexible(
-                  flex: 2, 
+                  flex: 1, 
                   fit: FlexFit.tight,
                   child: NoteText('based on ${food.numberRatings} ratings.')
                 )

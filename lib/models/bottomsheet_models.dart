@@ -1,25 +1,20 @@
 import 'package:flutter/foundation.dart';
 
 class SheetRequest {
-
-}
-
-class SheetEdit extends SheetRequest{
   final String title;
   final String placeholderOne;
   final String placeholderTwo;
+  final int price;
+  final String rating;
   final String confirmTitle;
-
-  SheetEdit({
+  SheetRequest( {
     @required this.title, 
     this.placeholderOne, 
     this.placeholderTwo, 
-    @required this.confirmTitle
+    this.price, 
+    this.rating,
+    @required this.confirmTitle,
   });
-}
-
-class SheetFood extends SheetRequest {
-  
 }
 
 class SheetResponse {

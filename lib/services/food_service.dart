@@ -43,4 +43,12 @@ class FoodService {
     return true;
   }
 
+  Future getAvailabilityForIds({@required List<dynamic> ids}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/getavailability.php', 
+      formData: { 'ids' : ids }
+    );
+    return data;
+  }
+
 }

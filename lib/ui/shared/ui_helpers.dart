@@ -40,9 +40,15 @@ double thirdScreenHeight(BuildContext context) =>
     screenHeightFraction(context, dividedBy: 3);
 
 EdgeInsets defaultPadding(context) =>  EdgeInsets.symmetric(
-      horizontal: tenthScreenWidth(context),
+      horizontal: twelfthScreenWidth(context),
       vertical: screenWidthFraction(context, dividedBy: 15),
     );
 
-double tenthScreenWidth(BuildContext context) =>
-    screenWidthFraction(context, dividedBy: 10);
+double twelfthScreenWidth(BuildContext context) =>
+    screenWidthFraction(context, dividedBy: 12);
+
+// i guess some more insight could be put into this
+double smartAspectRatio(BuildContext context) {
+  var ratio = MediaQuery.of(context).devicePixelRatio;
+  return ratio < 2 ? 1.25 : ratio > 3 ? 0.75 : 1.25-(ratio-2)*0.5;
+}

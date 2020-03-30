@@ -23,62 +23,70 @@ class CanteenView extends StatelessWidget {
       onModelReady: (model) => model.getFoodItems(canteenId),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: defaultPadding(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              model.canteen != null
-              ? Text(model.canteen.name, style: headerTextStyle)
-              : LoadingCard(),
-              Expanded(
-                child: ListView(
-                  children: model.food != null
-                  ? List.generate(model.food.keys.length, (i) => i).map((category) => StickyHeaderBuilder(
-                      overlapHeaders: false,
-                      builder: (context, stuckAmount) {
-                        stuckAmount = stuckAmount.clamp(0.0, 1.0);
-                        return Container(
-                          // the 50 height acts kinda like 2 x verticalSpaceMedium so nice little hack #3 I guess
-                          height: 100.0 - (50 * (1 - stuckAmount)),
-                          color: Colors.white,
-                          alignment: Alignment.center,
-                          child: Text(
-                            model.food.keys.elementAt(category),                 
-                            style: subHeaderTextStyle.copyWith(color: Color.lerp(Colors.black87, Theme.of(context).primaryColor, stuckAmount)),
-                          ),
-                        );
-                      },
-                      content: Column(
+        body: RefreshIndicator(
+          onRefresh: () async => model.getFoodItems(canteenId),
+          child: Padding(
+            padding: defaultPadding(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                model.canteen != null
+                ? Text(model.canteen.name, style: headerTextStyle)
+                : LoadingCard(),
+                Expanded(
+                  child: ListView(
+                    children: model.food != null
+                    ? List.generate(model.food.keys.length, (i) => i).map((category) => StickyHeaderBuilder(
+                        overlapHeaders: false,
+                        builder: (context, stuckAmount) {
+                          stuckAmount = stuckAmount.clamp(0.0, 1.0);
+                          return Container(
+                            // the 50 height acts kinda like 2 x verticalSpaceMedium so nice little hack #3 I guess
+                            height: 100.0 - (50 * (1 - stuckAmount)),
+                            color: Colors.white,
+                            alignment: Alignment.center,
+                            child: Text(
+                              model.food.keys.elementAt(category),                 
+                              style: subHeaderTextStyle.copyWith(color: Color.lerp(Colors.black87, Theme.of(context).primaryColor, stuckAmount)),
+                            ),
+                          );
+                        },
+                        content: Column(
+                          children: <Widget>[
+                            GridView.count(
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              crossAxisCount: 2,
+                              childAspectRatio: smartAspectRatio(context),
+                              mainAxisSpacing: 25, // verticalSpaceMedium
+                              crossAxisSpacing: 25,
+                              children: List.generate(model.food.values.elementAt(category).length, (index) => index)
+                                .map((foodIndex) => FoodCard(
+                                  food: model.food.values.elementAt(category)[foodIndex], 
+                                  onPressed: () {
+                                    model.addToCart(model.food.values.elementAt(category)[foodIndex]);
+                                  },
+                                  onLongPressed: () {
+                                    model.addToFavourites(model.food.values.elementAt(category)[foodIndex]);
+                                  }
+                                )).toList()
+                            ),
+                            topSpacedDivider,
+                          ],
+                        ),
+                        ),
+                      ).toList()
+                    : List.generate(3, (i) => i).map((i) => Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          GridView.count(
-                            shrinkWrap: true,
-                            physics: ScrollPhysics(),
-                            crossAxisCount: 2,
-                            childAspectRatio: 1.2,
-                            mainAxisSpacing: 25, // verticalSpaceMedium
-                            crossAxisSpacing: 25,
-                            children: List.generate(model.food.values.elementAt(category).length, (index) => index)
-                              .map((foodId) => FoodCard(
-                                model.food.values.elementAt(category)[foodId], () {
-
-                                })).toList()
-                          ),
-                          topSpacedDivider,
-                        ],
-                      ),
-                      ),
-                    ).toList()
-                  : List.generate(3, (i) => i).map((i) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        verticalSpaceMedium,
-                        LoadingCard(),
-                      ]))
-                      .toList(),
+                          verticalSpaceMedium,
+                          LoadingCard(),
+                        ]))
+                        .toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

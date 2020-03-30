@@ -21,51 +21,51 @@ class LoginView extends StatelessWidget {
         body: Padding(
           padding: defaultPadding(context),
           child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Carvings',
-                  style: headerTextStyle,
-                ),
-                verticalSpaceLarge,
-                InputField(
-                  placeholder: 'Email',
-                  controller: emailController,
-                  textInputType: TextInputType.emailAddress,
-                ),
-                verticalSpaceSmall,
-                InputField(
-                  placeholder: 'Password',
-                  password: true,
-                  controller: passwordController,
-                ),
-                verticalSpaceMedium,
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    BusyButton(
-                      title: 'Login',
-                      busy: model.busy,
-                      onPressed: () {
-                        model.login(email: emailController.text, password: passwordController.text);
-                      },
-                    )
-                  ],
-                ),
-                verticalSpaceMedium,
-                TextLink(
-                  'Create an Account if you\'re new.',
-                  onPressed: () {
-                    model.navigateToSignUp();
-                  },
-                )
-              ],
-            ),
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Carvings',
+                style: headerTextStyle,
+              ),
+              verticalSpaceLarge,
+              InputField(
+                placeholder: 'Email',
+                controller: emailController,
+                textInputType: TextInputType.emailAddress,
+              ),
+              verticalSpaceSmall,
+              InputField(
+                placeholder: 'Password',
+                password: true,
+                controller: passwordController,
+              ),
+              verticalSpaceMedium,
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  BusyButton(
+                    title: 'Login',
+                    busy: model.busy,
+                    onPressed: () {
+                      model.login(email: emailController.text, password: passwordController.text);
+                    },
+                  )
+                ],
+              ),
+              verticalSpaceMedium,
+              TextLink(
+                'Create an Account if you\'re new.',
+                onPressed: () {
+                  model.navigateToSignUp();
+                },
+              )
+            ],
           ),
-        )
+        ),
+      )
     );
   }
 }

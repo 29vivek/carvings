@@ -17,6 +17,15 @@ Widget topSpacedDivider = Column(
   ],
 );
 
+Widget smallSpacedDivider = Column(
+  children: const <Widget>[
+    verticalSpaceSmall,
+    const Divider(color: Colors.blueGrey, height: 5.0),
+    verticalSpaceSmall,
+  ],
+);
+
+
 Widget verticalSpace(double height) => SizedBox(height: height);
 
 double screenWidth(BuildContext context) => MediaQuery.of(context).size.width;

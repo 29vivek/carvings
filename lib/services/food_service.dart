@@ -14,7 +14,7 @@ class FoodService {
   Future getFoodItemsFor({@required int canteenId}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/getfood.php',
-      formData: {'canteenId': canteenId},
+      formData: { 'canteenId': canteenId },
     );
     if(data is String) {
       return data;
@@ -49,6 +49,45 @@ class FoodService {
       formData: { 'ids' : ids }
     );
     return data;
+  }
+
+  Future getFoodFodIds({@required List<dynamic> ids}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/getfoodforids.php',
+      formData: { 'ids' : ids }
+    );
+    return data;
+  }
+
+  Future placeOrder({@required Map<String, dynamic> bundle}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/placeorder.php',
+      formData: bundle,
+    );
+    if(data is String) {
+      return data;
+    } else if(data['code'] == '0') {
+      return data['message'];
+    } else {
+      // data['message'] is also valid message
+      return true;
+    }
+  }
+
+  Future getSearchedFoodItems({@required keyword}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/search.php',
+      formData: { 'keyword': keyword },
+    );
+    if(data is String) {
+      return data;
+    } else {
+      var food = List<Food>();
+      for(var item in data) {
+        food.add(Food.fromData(item));
+      }
+      return food;
+    }
   }
 
 }

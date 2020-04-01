@@ -38,7 +38,7 @@ class ProfileViewModel extends BaseModel {
       cancelTitle: 'I changed my mind',
     );
     if(response.confirmed) {
-      var result = _authenticationService.logout();
+      var result = await _authenticationService.logout();
       if(result) {
         _navigationService.popAllAndNavigateTo(LoginViewRoute);
       }

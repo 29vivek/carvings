@@ -2,6 +2,7 @@ import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/canteen.dart';
+import 'package:carvings/models/cart_item.dart';
 import 'package:carvings/models/food.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/database_service.dart';
@@ -35,7 +36,8 @@ class BrowseViewModel extends BaseModel {
       _dialogService.showDialog(title: 'Error Occurred!', description: result);
     }
     // else all went fine.
-    getFavourites();
+    // fetch everything to update the first time.
+    fetchFavourites();
   }
 
   void getFavourites() async {
@@ -82,7 +84,9 @@ class BrowseViewModel extends BaseModel {
     );
 
     if(response.confirmed) {
-      // add to cart
+      await _databaseService.insertToCart(
+        CartItem(foodId: food.id, foodName: food.name, canteeenName: food.canteenName, quantity: response.number, price: food.price)
+      );
     }
 
     setBusy(false);
@@ -90,8 +94,37 @@ class BrowseViewModel extends BaseModel {
 
   void removeFromFavourites(Food food) async {
     
-    await _databaseService.delete(food.id);
+    await _databaseService.deleteFavourite(food.id);
     getFavourites();
+
+  }
+
+  void fetchFavourites() async {
+
+    var ids = await _databaseService.getFavouriteIds();
+    
+    //to handle case where there is no favs
+    if(ids.isNotEmpty) {
+      var food = await _foodService.getFoodFodIds(ids: ids);
+    
+      if(food is String) {
+        _dialogService.showDialog(
+          title: 'Error occurred!',
+          description: food // lol
+        );
+        return;
+      }
+      
+      await _databaseService.updateAllFood(food);
+      // update all the food params like ratings and all, once per app launch.
+    }
+
+    setBusy(true);
+
+    var result = await _databaseService.getFavourites();
+    _favourites = result;
+    
+    setBusy(false);
 
   }
 

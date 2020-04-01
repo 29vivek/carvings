@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carvings/models/cart_item.dart';
 import 'package:carvings/models/food.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,7 +13,9 @@ class DatabaseService {
   static final _databaseVersion = 1;
 
   static final _favouritesTable = 'Favourites';
-  final _maximumFavouries = 8;
+  static final _maximumFavouries = 8;
+
+  static final _cartTable = 'Cart';
   
   DatabaseService._privateConstructor();
   static DatabaseService get instance => DatabaseService._privateConstructor();
@@ -49,6 +52,49 @@ class DatabaseService {
         CanteenName TEXT
       )
     ''');
+    await db.execute('''
+      CREATE TABLE $_cartTable (
+        FoodID INTEGER,
+        Name TEXT,
+        Price INTEGER,        
+        Quantity INTEGER,
+        CanteenName TEXT
+      )
+    ''');
+
+  }
+
+  Future<dynamic> insertToCart(CartItem item) async {
+    
+    Database db = await instance.database;
+    List<Map<String, dynamic>> presentItemCount = await db.query(_cartTable, columns: ['Quantity'], where: 'FoodID = ?', whereArgs: [item.foodId], limit: 1);
+
+    if(presentItemCount.isNotEmpty) {
+      return updateCartItemQuantity(item.foodId, presentItemCount.first['Quantity'] + item.quantity);
+    }
+
+    return await db.insert(_cartTable, item.toJson());
+  }
+
+  Future<List<CartItem>> getCartItems() async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(_cartTable);
+    return result.map((item) => CartItem.fromData(item)).toList();
+  }
+
+  Future<void> clearCart() async {
+    Database db = await instance.database;
+    await db.delete(_cartTable);
+  }
+
+  Future<void> updateCartItemQuantity(int id, int newQuantity) async {
+    Database db = await instance.database;
+    return await db.update(_cartTable, {'Quantity' : newQuantity}, where: 'FoodID = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteCartItem(int id) async {
+    Database db = await instance.database;
+    return await db.delete(_cartTable, where: 'FoodID = ?', whereArgs: [id]);
   }
 
   Future<dynamic> insertFavourite(Food food) async {
@@ -75,9 +121,14 @@ class DatabaseService {
     return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_favouritesTable'));
   }
 
-  Future<int> delete(int id) async {
+  Future<int> deleteFavourite(int id) async {
     Database db = await instance.database;
     return await db.delete(_favouritesTable, where: 'FoodID = ?', whereArgs: [id]);
+  }
+
+  Future<void> clearFavourites() async {
+    Database db = await instance.database;
+    await db.delete(_favouritesTable);
   }
 
   Future<bool> _isFavouritePresent(int id) async {
@@ -96,8 +147,20 @@ class DatabaseService {
     Database db = await instance.database;
     // old school for loop, cause why not
     for(var i=0; i<ids.length; i++) {
-      await db.update(_favouritesTable, {'Availability': availabilities[i]}, where: 'FoodID = ?', whereArgs: [ids[i]]);
+      await db.update(_favouritesTable, availabilities[i], where: 'FoodID = ?', whereArgs: [ids[i]]);
     }
   }
+
+  Future<void> updateAllFood(List<dynamic> fetchedFood) async {
+    Database db = await instance.database;
+    await db.delete(_favouritesTable);
+    Batch batch = db.batch();
+    for(var food in fetchedFood) {
+      batch.insert(_favouritesTable, food);
+    }
+    await batch.commit(noResult: true);
+  }
+
+
 
 }

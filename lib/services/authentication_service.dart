@@ -1,5 +1,6 @@
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/user.dart';
+import 'package:carvings/services/database_service.dart';
 import 'package:carvings/services/localstorage_service.dart';
 import 'package:carvings/services/web_service.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,7 @@ class AuthenticationService {
   
   final LocalStorageService _storageService = locator<LocalStorageService>();
   final WebService _webService = locator<WebService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
 
   User _user;
   User get currentUser => _user;
@@ -62,8 +64,10 @@ class AuthenticationService {
     return _user != null;
   }
 
-  bool logout() {
+  Future<bool> logout() async {
     _storageService.deleteUser();
+    await _databaseService.clearFavourites();
+    await _databaseService.clearCart();
     return true;
   }
 

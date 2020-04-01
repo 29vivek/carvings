@@ -61,7 +61,11 @@ class HomeView extends StatelessWidget {
               title: NoteText('Profile'),
             ),
           ],
-          itemChanged: model.changeTab,
+          itemChanged: (int tab) {
+            FocusScope.of(context).unfocus();
+            // nice little hack #iforgotthecount
+            model.changeTab(tab);
+          } ,
         ),
       ),
     );

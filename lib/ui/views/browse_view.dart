@@ -28,24 +28,24 @@ class BrowseView extends StatelessWidget {
                 model.favourites != null
                 ? model.favourites.length != 0
                 ? GridView.count(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  crossAxisCount: 2,
-                  childAspectRatio: smartAspectRatio(context),
-                  mainAxisSpacing: 25, // verticalSpaceMedium
-                  crossAxisSpacing: 25,
-                  children: List.generate(model.favourites.length, (index) => index)
-                    .map((foodIndex) => FoodCard(
-                      food: model.favourites[foodIndex], 
-                      onPressed: () {
-                        model.addToCart(model.favourites[foodIndex]);
-                      },
-                      onLongPressed: () {
-                        model.removeFromFavourites(model.favourites[foodIndex]);
-                      }
-                    )).toList()
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    crossAxisCount: 2,
+                    childAspectRatio: smartAspectRatio(context),
+                    mainAxisSpacing: 25, // verticalSpaceMedium
+                    crossAxisSpacing: 25,
+                    children: List.generate(model.favourites.length, (index) => index)
+                      .map((foodIndex) => FoodCard(
+                        food: model.favourites[foodIndex], 
+                        onPressed: () {
+                          model.addToCart(model.favourites[foodIndex]);
+                        },
+                        onLongPressed: () {
+                          model.removeFromFavourites(model.favourites[foodIndex]);
+                        }
+                      )).toList()
                   )
-                : Center(child: NoteText('Duh! Your favourites list is empty. Long press food items to add favourites.'))
+                : NoteText('Duh! Your favourites list is empty. Long press food items to add favourites.')
                 : LoadingCard(),
                 topSpacedDivider,
                 verticalSpaceMedium,

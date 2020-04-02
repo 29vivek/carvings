@@ -22,7 +22,7 @@ class StarRating extends StatelessWidget {
     return GestureDetector(
       onTap: onRatingChanged == null ? null : () => onRatingChanged(starNumber),
       child: Padding(
-        padding: const EdgeInsets.all(1.0),
+        padding: const EdgeInsets.all(1),
         child: icon,
       ),
     );

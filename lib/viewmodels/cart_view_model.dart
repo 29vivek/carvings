@@ -37,14 +37,11 @@ class CartViewModel extends BaseModel {
       'items' : {},
       'total' : 0
     };
-
     int orderTotal = 0;
-
     for(var item in _cartItems) {
       bundle['items']['${item.foodId}'] = item.quantity;
       orderTotal += item.quantity * item.price;
     }
-    
     bundle['total'] = orderTotal;
 
     print(bundle);

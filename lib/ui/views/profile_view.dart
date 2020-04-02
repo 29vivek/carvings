@@ -1,5 +1,8 @@
 import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/expansion_list.dart';
+import 'package:carvings/ui/widgets/loading_card.dart';
+import 'package:carvings/ui/widgets/note_text.dart';
+import 'package:carvings/ui/widgets/order_card.dart';
 import 'package:carvings/ui/widgets/text_link.dart';
 import 'package:carvings/viewmodels/profile_view_model.dart';
 import 'package:flutter/material.dart';
@@ -16,59 +19,83 @@ class ProfileView extends StatelessWidget {
       onModelReady: (model) => model.getUser(),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: defaultPadding(context),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '${model.user.role} Profile',
-                style: headerTextStyle,
-              ),
-              verticalSpaceMedium,
-              RichText(
-                text: TextSpan(
-                  style: subHeaderTextStyle,
-                  children: [
-                    TextSpan(text: 'Hi '),
-                    TextSpan(text: model.user.name, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
-                    TextSpan(text: '! Your email is '),
-                    TextSpan(text: model.user.email, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
-                    TextSpan(text: ' and your number is '),
-                    TextSpan(text: model.user.number, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
-                    TextSpan(text: '.')
-                  ],
+        body: RefreshIndicator(
+          onRefresh: () async => model.getUser(),
+          child: Padding(
+            padding: defaultPadding(context),
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        '${model.user.role} Profile',
+                        style: headerTextStyle,
+                      ),
+                      verticalSpaceSmall,
+                      RichText(
+                        text: TextSpan(
+                          style: subHeaderTextStyle,
+                          children: [
+                            TextSpan(text: 'Hi '),
+                            TextSpan(text: model.user.name, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
+                            TextSpan(text: '! Your email is '),
+                            TextSpan(text: model.user.email, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
+                            TextSpan(text: ' and your number is '),
+                            TextSpan(text: model.user.number, style: subHeaderTextStyle.copyWith(fontStyle: FontStyle.italic)),
+                            TextSpan(text: '.')
+                          ],
+                        ),
+                      ),
+                      verticalSpaceMedium,
+                      TextLink(
+                        'Edit Details',
+                        onPressed: () => model.editDetails(),
+                      ),
+                      verticalSpaceMedium,
+                      TextLink(
+                        'Not ${model.user.name}? Logout',
+                        onPressed: () => model.logout(),
+                      ),
+                      verticalSpaceLarge,
+                      Text('History',
+                        style: headerTextStyle,
+                      ),
+                      verticalSpaceSmall,
+                      ExpansionList<String>(
+                        items: <String> [
+                          'Today',
+                          'This Month',
+                          'All',
+                        ],
+                        title: model.selectedFilter,
+                        onItemSelected: (filter) => model.setSelectedFilter(filter),
+                      ),
+                      verticalSpaceSmall,
+                    ],
+                  ),
                 ),
-              ),
-              verticalSpaceMedium,
-              TextLink(
-                'Edit Details',
-                onPressed: () => model.editDetails(),
-              ),
-              verticalSpaceMedium,
-              TextLink(
-                'Not ${model.user.name}? Logout',
-                onPressed: () => model.logout(),
-              ),
-              verticalSpaceLarge,
-              Text('History',
-                style: headerTextStyle,
-              ),
-              verticalSpaceSmall,
-              ExpansionList<String>(
-                items: <String> [
-                  'All',
-                  'Today',
-                  'Past Week',
-                  'This Month',
-                  'This Year',
-                ],
-                title: model.selectedFilter,
-                onItemSelected: (filter) => model.setSelectedFilter(filter),
-              ),
-            ],
+                model.orders != null
+                ? model.orders.length > 0 
+                ? SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, i) => Column(
+                        children: <Widget>[
+                          OrderCard(order: model.orders[i], onRating: (int orderItemId, int rating) {
+                            model.rateFood(orderItemId, rating);
+                          },),
+                          verticalSpaceSmall,
+                        ],
+                      ),
+                      childCount: model.orders.length,
+                    )
+                  )
+                : SliverToBoxAdapter(child: NoteText('You do not have any orders for the selected filter!'))
+                : SliverToBoxAdapter(child: LoadingCard())
+              ],
+            ),
           ),
         )
       ),

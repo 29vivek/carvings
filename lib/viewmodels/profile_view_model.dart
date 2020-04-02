@@ -2,10 +2,12 @@ import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/dialog_models.dart';
+import 'package:carvings/models/order.dart';
 import 'package:carvings/models/user.dart';
 import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/dialog_service.dart';
+import 'package:carvings/services/food_service.dart';
 import 'package:carvings/services/navigation_service.dart';
 import 'package:carvings/viewmodels/base_model.dart';
 
@@ -15,6 +17,7 @@ class ProfileViewModel extends BaseModel {
   DialogService _dialogService = locator<DialogService>();
   BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   NavigationService _navigationService = locator<NavigationService>();
+  FoodService _foodService = locator<FoodService>();
 
   User _user;
   User get user => _user;
@@ -22,12 +25,41 @@ class ProfileViewModel extends BaseModel {
   void getUser() {
     _user = _authenticationService.currentUser;
     notifyListeners();
+
+    _getOrdersForFilter();
   }
 
 
   String _selectedFilter = 'Today';
   String get selectedFilter => _selectedFilter;
 
+  List<Order> _orders;
+  List<Order> get orders => _orders;
+
+  void _getOrdersForFilter() async {
+
+    _orders = null;
+    notifyListeners();
+
+    var result = await _foodService.getOrders(userId: _user.id, filter: _selectedFilter);
+    if(result is String) {
+      _dialogService.showDialog(
+        title: 'Error Occurred!',
+        description: result,
+      );
+    } else {
+      _orders = result;
+    }
+
+    notifyListeners();
+  }
+
+  void setSelectedFilter(dynamic filter) async {
+    _selectedFilter = filter;
+    notifyListeners();
+
+    _getOrdersForFilter();
+  }
 
   void logout() async {
 
@@ -44,11 +76,6 @@ class ProfileViewModel extends BaseModel {
       }
     }
 
-  }
-
-  void setSelectedFilter(dynamic filter) {
-    _selectedFilter = filter;
-    notifyListeners();
   }
   
   void editDetails() async {
@@ -85,6 +112,17 @@ class ProfileViewModel extends BaseModel {
       }
     }
 
+  }
+
+  void rateFood(int orderItemId, int rating) async {
+    var result = await _foodService.rateFood(orderItemId: orderItemId, rating: rating);
+    if(result is String) {
+      _dialogService.showDialog(
+        title: 'Error Occurred!',
+        description: 'Your rating may not reflected in the database. Reason: $result',
+      );
+    } 
+    // else im good actually #2
   }
 
 }

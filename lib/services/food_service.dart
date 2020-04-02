@@ -1,6 +1,7 @@
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/canteen.dart';
 import 'package:carvings/models/food.dart';
+import 'package:carvings/models/order.dart';
 import 'package:carvings/services/web_service.dart';
 import 'package:flutter/foundation.dart';
 
@@ -87,6 +88,40 @@ class FoodService {
         food.add(Food.fromData(item));
       }
       return food;
+    }
+  }
+
+  Future getOrders({@required userId, String filter}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/orders.php',
+      formData: {
+        'userId' : userId,
+        'filter' : filter,
+      },
+    );
+    if(data is String) {
+      return data;
+    } else {
+      var orders = List<Order>();
+      for(var order in data) {
+        orders.add(Order.fromData(order));
+      }
+      return orders;
+    }
+  }
+
+  Future rateFood({@required orderItemId, int rating}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/ratefood.php',
+      formData: {
+        'orderItemId' : orderItemId,
+        'rating' : rating,
+      },
+    );
+    if(data is String) {
+      return data;
+    } else {
+      return true;
     }
   }
 

@@ -17,54 +17,57 @@ class SearchView extends StatelessWidget {
       viewModel: SearchViewModel(),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
-        body: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          onPanDown: (_) {
-            FocusScope.of(context).unfocus();
-          },
-          child: Padding(
-            padding: defaultPadding(context),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Search', style: headerTextStyle),
-                verticalSpaceMedium,
-                InputField(
-                  controller: _searchController,
-                  textInputAction: TextInputAction.search,
-                  placeholder: 'Search...',
-                  enterPressed: () {
-                    model.getFoodItems(_searchController.text.trim());
-                  },
-                ),
-                verticalSpaceMedium,
-                Expanded(
-                  child: model.searchedItems != null
-                  ? model.searchedItems.length > 0
-                  ? GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: smartAspectRatio(context),
-                      mainAxisSpacing: 25, // verticalSpaceMedium
-                      crossAxisSpacing: 25,
-                      children: List.generate(model.searchedItems.length, (index) => index)
-                        .map((foodIndex) => FoodCard(
-                          food: model.searchedItems[foodIndex], 
-                          onPressed: () {
-                            model.addToCart(model.searchedItems[foodIndex]);
-                          },
-                          onLongPressed: () {
-                            model.addToFavourites(model.searchedItems[foodIndex]);
-                          }
-                        )).toList()
-                    )
-                  : NoteText('Whoops. We didn\'t find anything.')
-                  : NoteText('Enter a keyword. Go on, enter it!')
-                ),
-              ],
+        body: RefreshIndicator(
+          onRefresh: () async => model.getFoodItems(_searchController.text),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            onPanDown: (_) {
+              FocusScope.of(context).unfocus();
+            },
+            child: Padding(
+              padding: defaultPadding(context),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Search', style: headerTextStyle),
+                  verticalSpaceMedium,
+                  InputField(
+                    controller: _searchController,
+                    textInputAction: TextInputAction.search,
+                    placeholder: 'Search...',
+                    enterPressed: () {
+                      model.getFoodItems(_searchController.text.trim());
+                    },
+                  ),
+                  verticalSpaceMedium,
+                  Expanded(
+                    child: model.searchedItems != null
+                    ? model.searchedItems.length > 0
+                    ? GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: smartAspectRatio(context),
+                        mainAxisSpacing: 25, // verticalSpaceMedium
+                        crossAxisSpacing: 25,
+                        children: List.generate(model.searchedItems.length, (index) => index)
+                          .map((foodIndex) => FoodCard(
+                            food: model.searchedItems[foodIndex], 
+                            onPressed: () {
+                              model.addToCart(model.searchedItems[foodIndex]);
+                            },
+                            onLongPressed: () {
+                              model.addToFavourites(model.searchedItems[foodIndex]);
+                            }
+                          )).toList()
+                      )
+                    : NoteText('Whoops. We didn\'t find anything.')
+                    : NoteText('Enter a keyword. Go on, enter it!')
+                  ),
+                ],
+              ),
             ),
           ),
         ),

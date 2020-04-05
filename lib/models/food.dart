@@ -18,7 +18,7 @@ class Food {
       availability = data['Availability'] > 0 ? true : false,
       rating = data['Rating'],
       numberRatings = data['NumberRatings'],
-      category = data['Category'],
+      category = data['CategoryName'],
       canteenName = data['CanteenName'];
 
   Map<String, dynamic> toJson() {
@@ -29,7 +29,7 @@ class Food {
       'Availability' : availability ? 1 : 0,
       'Rating' : rating,
       'NumberRatings' : numberRatings,
-      'Category' : category,
+      'CategoryName' : category,
       'CanteenName' : canteenName,
     };
   }

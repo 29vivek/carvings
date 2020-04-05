@@ -4,6 +4,7 @@ import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/canteen.dart';
 import 'package:carvings/models/cart_item.dart';
 import 'package:carvings/models/food.dart';
+import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/database_service.dart';
 import 'package:carvings/services/dialog_service.dart';
@@ -18,18 +19,30 @@ class BrowseViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+  final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   List<Canteen> _canteens;
   List<Canteen> get canteens => _canteens;
 
   List<Food> _favourites;
   List<Food> get favourites => _favourites;
+  
+  String _role = '';
+  String get role  => _role;
+
+  void _findRole() {
+    _role = _authenticationService.currentUser.role;
+    notifyListeners();
+  }
 
   void navigateToCanteen(int canteenId) {
     _navigationService.navigateTo(CanteenViewRoute, arguments: canteenId);
   }
 
   void getCanteens() async {
+
+    _findRole();
+
     var result = await _foodService.getCanteenInfo();
     _canteens = _foodService.canteens;
     if(result is String) {
@@ -37,8 +50,13 @@ class BrowseViewModel extends BaseModel {
     }
     // else all went fine.
     // fetch everything to update the first time.
-    fetchFavourites();
-  }
+    if(_role == 'User') 
+      fetchFavourites();
+    else {
+      _favourites = [];
+      notifyListeners();
+    }
+}
 
   void getFavourites() async {
 
@@ -126,6 +144,35 @@ class BrowseViewModel extends BaseModel {
     
     setBusy(false);
 
+  }
+
+  void navigateToAddFood() {
+    _navigationService.navigateTo(ModifyViewRoute);
+  }
+
+  void toggleAvailability(bool availability) async {
+
+    var response = await _dialogService.showConfirmationDialog(
+      title: 'Toggle Availability',
+      description: 'Mark all food items as ${availability ? 'available' : 'unavailable'}?',
+      confirmationTitle: 'Yes',
+      cancelTitle: 'So this is what this does',
+    );
+
+    if(response.confirmed) {
+      var result = await _foodService.toggleAvailability(availability: availability);
+      if(result is String) {
+        _dialogService.showDialog(
+          title: 'Error Occurred',
+          description: result
+        );
+      }
+      // else im good actually.
+    }
+  }
+
+  void editCanteen(int i) {
+    _navigationService.navigateTo(ModifyViewRoute, arguments: _canteens[i]);
   }
 
 

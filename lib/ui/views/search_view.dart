@@ -15,6 +15,7 @@ class SearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelProvider<SearchViewModel>.withConsumer(
       viewModel: SearchViewModel(),
+      onModelReady: (model) => model.findRole(),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
         body: RefreshIndicator(
@@ -59,7 +60,9 @@ class SearchView extends StatelessWidget {
                               model.addToCart(model.searchedItems[foodIndex]);
                             },
                             onLongPressed: () {
-                              model.addToFavourites(model.searchedItems[foodIndex]);
+                              model.role == 'Admin' 
+                              ? model.navigateToEditFood(model.searchedItems[foodIndex])
+                              : model.addToFavourites(model.searchedItems[foodIndex]);
                             }
                           )).toList()
                       )

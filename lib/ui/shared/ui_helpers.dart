@@ -17,6 +17,13 @@ Widget topSpacedDivider = Column(
   ],
 );
 
+Widget bottomSpacedDivider = Column(
+  children: const <Widget>[
+    const Divider(color: Colors.blueGrey, height: 5.0),
+    verticalSpaceMedium,
+  ],
+);
+
 Widget smallSpacedDivider = Column(
   children: const <Widget>[
     verticalSpaceSmall,

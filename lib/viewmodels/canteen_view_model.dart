@@ -1,8 +1,10 @@
+import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/canteen.dart';
 import 'package:carvings/models/cart_item.dart';
 import 'package:carvings/models/food.dart';
+import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/database_service.dart';
 import 'package:carvings/services/dialog_service.dart';
@@ -18,6 +20,7 @@ class CanteenViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   Map<String, List<Food>> _categorizedFood;
 
@@ -26,15 +29,25 @@ class CanteenViewModel extends BaseModel {
   Canteen _canteen;
   Canteen get canteen => _canteen;
 
-  void getFoodItems(int canteenId) async {
-    
-    _canteen = _foodService.canteens[canteenId - 1]; // nice litte hack #2
+  String _role = '';
+  String get role  => _role;
+
+  void _findRole() {
+    _role = _authenticationService.currentUser.role;
+    notifyListeners();
+  }
+
+  void getFoodItems(int canteenIndex) async {
+
+    _findRole();
+
+    _canteen = _foodService.canteens[canteenIndex]; // index
 
     // for flashy animation 
     _categorizedFood = null;
     setBusy(true);
 
-    var result = await _foodService.getFoodItemsFor(canteenId: canteenId);
+    var result = await _foodService.getFoodItemsFor(canteenId: canteenIndex + 1);
     if(result is String) {
       await _dialogService.showDialog(title: 'Error Occurred!', description: result);
       // go back to browse view.
@@ -86,4 +99,9 @@ class CanteenViewModel extends BaseModel {
     setBusy(false);
 
   }
+
+  void editFood(Food food) async {
+    _navigationService.navigateTo(ModifyViewRoute, arguments: food);
+  }
+
 }

@@ -1,5 +1,6 @@
 import 'package:carvings/ui/views/cart_view.dart';
 import 'package:carvings/ui/views/browse_view.dart';
+import 'package:carvings/ui/views/pending_view.dart';
 import 'package:carvings/ui/views/profile_view.dart';
 import 'package:carvings/ui/views/search_view.dart';
 import 'package:carvings/ui/widgets/lazy_indexed_stack.dart';
@@ -13,7 +14,7 @@ import 'package:provider_architecture/provider_architecture.dart';
 
 class HomeView extends StatelessWidget {
   
-  final _userViews = [
+  final _views = [
     BrowseView(),
     SearchView(),
     CartView(),
@@ -21,7 +22,10 @@ class HomeView extends StatelessWidget {
   ];
 
   final _adminViews = [
-    
+    BrowseView(),
+    SearchView(),
+    PendingView(),
+    ProfileView(),
   ];
 
   @override
@@ -33,8 +37,8 @@ class HomeView extends StatelessWidget {
         body: LazyIndexedStack(
           reuse: true,
           index: model.index, 
-          itemCount: model.role == 'User' ? _userViews.length : _adminViews.length,
-          itemBuilder: (_, index) => model.role == 'User' ? _userViews[index] : _adminViews[index],
+          itemCount: model.role == 'User' ? _views.length : _adminViews.length,
+          itemBuilder: (_, index) => model.role == 'User' ? _views[index] : _adminViews[index],
         ),
         bottomNavBar: PlatformNavBar(
           android: (_) => MaterialNavBarData(
@@ -53,8 +57,8 @@ class HomeView extends StatelessWidget {
               title: NoteText('Search'),
             ),
             BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.shoppingBasket,),
-              title: NoteText('Cart'),
+              icon: model.role == 'User' ? FaIcon(FontAwesomeIcons.shoppingBasket,) : FaIcon(FontAwesomeIcons.bolt),
+              title: model.role == 'User' ? NoteText('Cart') : NoteText('Pending'),
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.userAlt,),

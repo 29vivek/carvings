@@ -1,11 +1,14 @@
+import 'package:carvings/constants/route_names.dart';
 import 'package:carvings/locator.dart';
 import 'package:carvings/models/bottomsheet_models.dart';
 import 'package:carvings/models/cart_item.dart';
 import 'package:carvings/models/food.dart';
+import 'package:carvings/services/authentication_service.dart';
 import 'package:carvings/services/bottomsheet_service.dart';
 import 'package:carvings/services/database_service.dart';
 import 'package:carvings/services/dialog_service.dart';
 import 'package:carvings/services/food_service.dart';
+import 'package:carvings/services/navigation_service.dart';
 import 'package:carvings/viewmodels/base_model.dart';
 
 class SearchViewModel extends BaseModel {
@@ -14,9 +17,19 @@ class SearchViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   List<Food> _searchedItems;
   List<Food> get searchedItems => _searchedItems;
+
+  String _role = '';
+  String get role  => _role;
+
+  void findRole() {
+    _role = _authenticationService.currentUser.role;
+    notifyListeners();
+  }
 
   void getFoodItems(String keyword) async {
     
@@ -71,6 +84,14 @@ class SearchViewModel extends BaseModel {
     // else im good actually.
 
     setBusy(false);
+
+  }
+
+  void navigateToEditFood(Food food) async {
+    _navigationService.navigateTo(ModifyViewRoute, arguments: food);
+  }
+
+  void getRole() {
 
   }
 

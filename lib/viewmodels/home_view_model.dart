@@ -9,7 +9,7 @@ class HomeViewModel extends BaseModel {
   String _role = '';
   String get role  => _role;
 
-  AuthenticationService _authenticationService = locator<AuthenticationService>();
+  final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   void changeTab(int index) {
     _index = index;

@@ -9,11 +9,13 @@ class FlatCard extends StatefulWidget {
   final String title;
   final String description;
   final Function onPressed;
+  final Function onLongPressed;
   const FlatCard({
     Key key, 
     this.title, 
     this.description,
-    this.onPressed,
+    this.onPressed, 
+    this.onLongPressed,
   }) : super(key: key);
 
   @override
@@ -29,6 +31,7 @@ class _FlatCardState extends State<FlatCard> {
         decoration: fieldDecoration,
         child: InkWell(
           onTap: widget.onPressed,
+          onLongPress: widget.onLongPressed,
           child: Padding(
             padding: massiveFieldPadding,
             child: Row(

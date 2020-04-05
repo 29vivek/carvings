@@ -48,7 +48,7 @@ class DatabaseService {
         Availability INTEGER,
         Rating REAL,
         NumberRatings INTEGER,
-        Category TEXT,
+        CategoryName TEXT,
         CanteenName TEXT
       )
     ''');

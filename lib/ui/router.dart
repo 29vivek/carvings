@@ -1,6 +1,7 @@
-import 'package:carvings/ui/views/browse_view.dart';
+import 'package:carvings/models/canteen.dart';
 import 'package:carvings/ui/views/canteen_view.dart';
 import 'package:carvings/ui/views/home_view.dart';
+import 'package:carvings/ui/views/modify_view.dart';
 import 'package:carvings/ui/views/startup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carvings/constants/route_names.dart';
@@ -29,15 +30,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: StartUpView(),
       );
-    case BrowseViewRoute:
-      return _getPageRoute(
-        routeName: settings.name,
-        viewToShow: BrowseView(),
-      );
     case CanteenViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: CanteenView(canteenId: settings.arguments,),
+        viewToShow: CanteenView(canteenIndex: settings.arguments,),
+      );
+    case ModifyViewRoute: 
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ModifyView(item: settings.arguments),
       );
     default:
       return MaterialPageRoute(

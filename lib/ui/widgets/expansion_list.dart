@@ -19,7 +19,6 @@ class ExpansionList<T> extends StatefulWidget {
 
 class _ExpansionListState extends State<ExpansionList> {
   final double startingHeight = sharedStyles.fieldHeight;
-  double expandedHeight;
   bool expanded = false;
   String selectedValue;
 
@@ -27,7 +26,6 @@ class _ExpansionListState extends State<ExpansionList> {
   void initState() {
     super.initState();
     selectedValue = widget.title;
-    _calculateExpandedHeight();
   }
 
   @override
@@ -36,7 +34,7 @@ class _ExpansionListState extends State<ExpansionList> {
       padding: sharedStyles.fieldPadding,
       duration: const Duration(milliseconds: 180),
       height: expanded
-          ? expandedHeight
+          ? _calculateExpandedHeight()
           : widget.smallVersion
               ? sharedStyles.smallFieldHeight
               : startingHeight,
@@ -50,7 +48,7 @@ class _ExpansionListState extends State<ExpansionList> {
         padding: const EdgeInsets.all(0),
         children: <Widget>[
           ExpansionListItem(
-            title: selectedValue,
+            title: widget.title,
             onTap: () {
               setState(() {
                 expanded = !expanded;
@@ -85,8 +83,8 @@ class _ExpansionListState extends State<ExpansionList> {
         .toList();
   }
 
-  void _calculateExpandedHeight() {
-    expandedHeight = 2 +
+  double _calculateExpandedHeight() {
+    return 2 +
         (widget.smallVersion
             ? sharedStyles.smallFieldHeight
             : sharedStyles.fieldHeight) +

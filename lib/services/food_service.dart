@@ -26,7 +26,7 @@ class FoodService {
         categorizedFood[category] = List<Food>();
       }
       for(var item in data['items']) {
-        categorizedFood[item['Category']].add(Food.fromData(item));
+        categorizedFood[item['CategoryName']].add(Food.fromData(item));
       }
       return categorizedFood;
     } 
@@ -91,7 +91,7 @@ class FoodService {
     }
   }
 
-  Future getOrders({@required userId, String filter}) async {
+  Future getOrders({@required int userId, String filter}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/orders.php',
       formData: {
@@ -110,7 +110,7 @@ class FoodService {
     }
   }
 
-  Future rateFood({@required orderItemId, int rating}) async {
+  Future rateFood({@required int orderItemId, int rating}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/ratefood.php',
       formData: {
@@ -118,11 +118,56 @@ class FoodService {
         'rating' : rating,
       },
     );
-    if(data is String) {
+    if(data is String)
       return data;
-    } else {
+    else
       return true;
-    }
+  }
+
+  Future toggleAvailability({@required bool availability}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/toggleavailability.php',
+      formData: {
+        'value': availability ? 1 : 0,
+      }
+    );
+    if(data is String)
+      return data;
+    else 
+      return true;
+  }
+
+  Future modifyFood({@required String name, @required int price, @required int categoryId, @required int foodId}) async {
+    var data = await _webService.performPostRequest(
+      endPoint: '/modifyfood.php',
+      formData: {
+        'name' : name,
+        'price' : price,
+        'categoryId' : categoryId,
+        'id' : foodId,      
+      }
+    );
+    if(data is String)
+      return data;
+    else 
+      return true;
+  }
+
+  Future modifyCanteen({@required String name, @required String description, @required int canteenId}) async {
+    var result = await _webService.performPostRequest(
+      endPoint: '/modifycanteen.php',
+      formData: {
+        'name' : name,
+        'description' : description,
+        'canteenId' : canteenId
+      }
+    );
+
+    if(result is String) 
+      return result;
+    else 
+      return true;
+
   }
 
 }

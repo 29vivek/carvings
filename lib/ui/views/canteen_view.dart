@@ -12,19 +12,19 @@ import 'package:sticky_headers/sticky_headers.dart';
 
 class CanteenView extends StatelessWidget {
 
-  final int canteenId;
+  final int canteenIndex;
 
-  const CanteenView({Key key, this.canteenId}) : super(key: key);
+  const CanteenView({Key key, this.canteenIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<CanteenViewModel>.withConsumer(
       viewModel: CanteenViewModel(),
-      onModelReady: (model) => model.getFoodItems(canteenId),
+      onModelReady: (model) => model.getFoodItems(canteenIndex),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
         body: RefreshIndicator(
-          onRefresh: () async => model.getFoodItems(canteenId),
+          onRefresh: () async => model.getFoodItems(canteenIndex),
           child: Padding(
             padding: defaultPadding(context),
             child: Column(
@@ -67,7 +67,9 @@ class CanteenView extends StatelessWidget {
                                     model.addToCart(model.food.values.elementAt(category)[foodIndex]);
                                   },
                                   onLongPressed: () {
-                                    model.addToFavourites(model.food.values.elementAt(category)[foodIndex]);
+                                    model.role == 'User' 
+                                    ? model.addToFavourites(model.food.values.elementAt(category)[foodIndex])
+                                    : model.editFood(model.food.values.elementAt(category)[foodIndex]);
                                   }
                                 )).toList()
                             ),

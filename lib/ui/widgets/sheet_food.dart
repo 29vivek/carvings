@@ -53,7 +53,7 @@ class _SheetFoodState extends State<SheetFood> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Flexible(
-              flex: 2,
+              flex: 3,
               fit: FlexFit.tight,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -65,7 +65,7 @@ class _SheetFoodState extends State<SheetFood> {
               ),
             ),
             Flexible(
-              flex: 1,
+              flex: 2,
               fit: FlexFit.tight,
               child: Row(
                 mainAxisSize: MainAxisSize.min,

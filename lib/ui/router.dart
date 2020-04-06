@@ -1,5 +1,6 @@
 import 'package:carvings/models/canteen.dart';
 import 'package:carvings/ui/views/canteen_view.dart';
+import 'package:carvings/ui/views/category_view.dart';
 import 'package:carvings/ui/views/home_view.dart';
 import 'package:carvings/ui/views/modify_view.dart';
 import 'package:carvings/ui/views/startup_view.dart';
@@ -39,6 +40,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: ModifyView(item: settings.arguments),
+      );
+    case CategoryViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: CategoryView(isAdd: settings.arguments,),
       );
     default:
       return MaterialPageRoute(

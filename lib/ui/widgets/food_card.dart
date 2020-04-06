@@ -9,8 +9,9 @@ class FoodCard extends StatelessWidget {
   final Food food;
   final Function onPressed;
   final Function onLongPressed;
+  final Function onDoubleTap;
 
-  FoodCard({@required this.food, this.onPressed, this.onLongPressed});
+  FoodCard({@required this.food, this.onPressed, this.onLongPressed, this.onDoubleTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class FoodCard extends StatelessWidget {
         child: InkWell(
           onLongPress: onLongPressed,
           onTap: food.availability ? onPressed : null,
+          onDoubleTap: onDoubleTap,
           child: Padding(
             padding: largeFieldPadding,
             child: Column(

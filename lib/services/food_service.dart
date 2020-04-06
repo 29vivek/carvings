@@ -91,12 +91,13 @@ class FoodService {
     }
   }
 
-  Future getOrders({@required int userId, String filter}) async {
+  Future getOrders({int userId, String filter, String which}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/orders.php',
       formData: {
-        'userId' : userId,
+        'userId' : userId ?? '',
         'filter' : filter,
+        'which' : which ?? ''
       },
     );
     if(data is String) {
@@ -124,11 +125,12 @@ class FoodService {
       return true;
   }
 
-  Future toggleAvailability({@required bool availability}) async {
+  Future toggleAvailability({@required bool availability, int foodId}) async {
     var data = await _webService.performPostRequest(
       endPoint: '/toggleavailability.php',
       formData: {
         'value': availability ? 1 : 0,
+        'id': foodId ?? 0 
       }
     );
     if(data is String)
@@ -168,6 +170,52 @@ class FoodService {
     else 
       return true;
 
+  }
+
+  Future deleteFood(int foodId) async {
+    var result = await _webService.performPostRequest(
+      endPoint: '/deletefood.php',
+      formData: {
+        'id': foodId,
+      }
+    );
+    if(result is String)
+      return result;
+    else if(result['code'] == '0')
+      return result['message'];
+    else 
+      return true;
+  }
+
+  Future completeOrder(int orderId) async {
+    var result = await _webService.performPostRequest(
+      endPoint: '/completeorder.php',
+      formData: {
+        'id': orderId ?? '',
+      }
+    );
+    if(result is String)
+      return result;
+    else 
+      return true;
+    
+  }
+
+  Future modifyCategory({int categoryId, int canteenId, String newCategoryName}) async {
+    var result = await _webService.performPostRequest(
+      endPoint: '/modifycategory.php',
+      formData: {
+        'id': categoryId ?? 0,
+        'canteenId': canteenId ?? 0,
+        'name': newCategoryName ?? '',
+      }
+    );
+    if(result is String)
+      return result;
+    else if(result['code'] == '0')
+      return result['message'];
+    else 
+      return true;
   }
 
 }

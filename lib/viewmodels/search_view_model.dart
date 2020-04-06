@@ -23,6 +23,8 @@ class SearchViewModel extends BaseModel {
   List<Food> _searchedItems;
   List<Food> get searchedItems => _searchedItems;
 
+  String _previousKeyword;
+
   String _role = '';
   String get role  => _role;
 
@@ -33,6 +35,8 @@ class SearchViewModel extends BaseModel {
 
   void getFoodItems(String keyword) async {
     
+    _previousKeyword = keyword;
+
     _searchedItems = null;
     if(keyword != '') {
       var data = await _foodService.getSearchedFoodItems(keyword: keyword);
@@ -93,6 +97,20 @@ class SearchViewModel extends BaseModel {
 
   void getRole() {
 
+  }
+
+  void toggleAvailability(Food food) async {
+    var result = await _foodService.toggleAvailability(availability: !food.availability, foodId: food.id);
+
+    if(result is String) {
+      _dialogService.showDialog(
+        title: 'Error Occurred!',
+        description: result
+      );
+    } else {
+      getFoodItems(_previousKeyword);
+    }
+    notifyListeners();
   }
 
 }

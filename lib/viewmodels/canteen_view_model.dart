@@ -29,25 +29,27 @@ class CanteenViewModel extends BaseModel {
   Canteen _canteen;
   Canteen get canteen => _canteen;
 
+  int _canteenIndex;
+
   String _role = '';
   String get role  => _role;
 
-  void _findRole() {
+  void findRole(int canteenIndex) {
     _role = _authenticationService.currentUser.role;
     notifyListeners();
+    getFoodItems(canteenIndex);
   }
 
   void getFoodItems(int canteenIndex) async {
 
-    _findRole();
-
-    _canteen = _foodService.canteens[canteenIndex]; // index
+    _canteenIndex = canteenIndex;
+    _canteen = _foodService.canteens[_canteenIndex]; // index
 
     // for flashy animation 
     _categorizedFood = null;
     setBusy(true);
 
-    var result = await _foodService.getFoodItemsFor(canteenId: canteenIndex + 1);
+    var result = await _foodService.getFoodItemsFor(canteenId: _canteenIndex + 1); // for the ID
     if(result is String) {
       await _dialogService.showDialog(title: 'Error Occurred!', description: result);
       // go back to browse view.
@@ -102,6 +104,20 @@ class CanteenViewModel extends BaseModel {
 
   void editFood(Food food) async {
     _navigationService.navigateTo(ModifyViewRoute, arguments: food);
+  }
+
+  void toggleAvailability(Food food) async {
+    var result = await _foodService.toggleAvailability(availability: !food.availability, foodId: food.id);
+
+    if(result is String) {
+      _dialogService.showDialog(
+        title: 'Error Occurred!',
+        description: result
+      );
+    } else {
+      getFoodItems(_canteenIndex);
+    }
+
   }
 
 }

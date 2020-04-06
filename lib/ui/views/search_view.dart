@@ -56,13 +56,14 @@ class SearchView extends StatelessWidget {
                         children: List.generate(model.searchedItems.length, (index) => index)
                           .map((foodIndex) => FoodCard(
                             food: model.searchedItems[foodIndex], 
-                            onPressed: () {
-                              model.addToCart(model.searchedItems[foodIndex]);
-                            },
+                            onPressed: () => model.role == 'User' ? model.addToCart(model.searchedItems[foodIndex]) : null,
+                            onDoubleTap: () => model.role == 'User'
+                            ? null
+                            : model.toggleAvailability(model.searchedItems[foodIndex]),   
                             onLongPressed: () {
-                              model.role == 'Admin' 
-                              ? model.navigateToEditFood(model.searchedItems[foodIndex])
-                              : model.addToFavourites(model.searchedItems[foodIndex]);
+                              model.role == 'User'
+                              ? model.addToFavourites(model.searchedItems[foodIndex])
+                              : model.navigateToEditFood(model.searchedItems[foodIndex]);
                             }
                           )).toList()
                       )

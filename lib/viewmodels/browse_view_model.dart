@@ -175,6 +175,10 @@ class BrowseViewModel extends BaseModel {
     _navigationService.navigateTo(ModifyViewRoute, arguments: _canteens[i]);
   }
 
+  void navigateToCategories(bool isAdd) {
+    _navigationService.navigateTo(CategoryViewRoute, arguments: isAdd);
+  }
+
 
 
 }

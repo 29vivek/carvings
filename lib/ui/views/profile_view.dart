@@ -83,16 +83,17 @@ class ProfileView extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (context, i) => Column(
                         children: <Widget>[
-                          OrderCard(order: model.orders[i], onRating: (int orderItemId, int rating) {
-                            model.rateFood(orderItemId, rating);
-                          },),
+                          OrderCard(
+                            order: model.orders[i], 
+                            onRating: model.user.role == 'User' ? (int orderItemId, int rating) => model.rateFood(orderItemId, rating) : null,
+                          ),
                           verticalSpaceSmall,
                         ],
                       ),
                       childCount: model.orders.length,
                     )
                   )
-                : SliverToBoxAdapter(child: NoteText('You do not have any orders for the selected filter!'))
+                : SliverToBoxAdapter(child: NoteText('No orders for the selected filter!'))
                 : SliverToBoxAdapter(child: LoadingCard())
               ],
             ),

@@ -43,7 +43,7 @@ class _CartCardState extends State<CartCard> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Flexible(
-            flex: 4,
+            flex: 3,
             fit: FlexFit.tight,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -56,7 +56,7 @@ class _CartCardState extends State<CartCard> {
             ),
           ),
           Flexible(
-            flex: 3,
+            flex: 2,
             fit: FlexFit.tight,
             child: Row(
               mainAxisSize: MainAxisSize.min,

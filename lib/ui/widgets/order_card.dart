@@ -3,14 +3,16 @@ import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/shared/ui_helpers.dart';
 import 'package:carvings/ui/widgets/note_text.dart';
 import 'package:carvings/ui/widgets/star_rating.dart';
+import 'package:carvings/ui/widgets/text_link.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {
 
   final Order order;
   final Function(int, int) onRating;
+  final Function onComplete;
 
-  const OrderCard({Key key, this.order, this.onRating}) : super(key: key);
+  const OrderCard({Key key, this.order, this.onRating, this.onComplete}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,14 @@ class OrderCard extends StatelessWidget {
                     itemBuilder: (context, i ) => OrderItemCard(item: order.items[i], onRating: onRating,),
                     itemCount: order.items.length,
                   ),
+                  if(onComplete != null && order.status == 'Processing')
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        smallSpacedDivider,
+                        TextLink('Complete this order', onPressed: onComplete,)
+                      ],
+                    ),
                 ],
               ),
             )
@@ -106,17 +116,19 @@ class _OrderItemCardState extends State<OrderItemCard> {
           children: <Widget>[
             Text('₹${widget.item.price} * ${widget.item.quantity} = ₹${widget.item.price * widget.item.quantity}', style: infoTextStyle,),
             verticalSpaceTiny,
-            rating != 0 
+            widget.onRating != null
+            ? rating != 0 
             ? NoteText('you rated $rating stars.')
             : StarRating(
-              rating: widget.item.didRateFood,
-              onRatingChanged: rating == 0 ? (newRating) {
-                setState(() {
-                  rating = newRating;
-                });
-                widget.onRating(widget.item.orderItemId, newRating);
-              } : null,
-            ),
+                rating: widget.item.didRateFood,
+                onRatingChanged: rating == 0 ? (newRating) {
+                  setState(() {
+                    rating = newRating;
+                  });
+                  widget.onRating(widget.item.orderItemId, newRating);
+                } : null,
+              )
+            : Container(), // empty container for admins
           ],
         )
       ],

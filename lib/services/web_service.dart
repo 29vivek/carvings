@@ -15,7 +15,7 @@ class WebService {
     }
     if(_dio == null) {
       _dio = Dio();
-      _dio.options.baseUrl = 'http://$HomeWiFi/carvings';
+      _dio.options.baseUrl = 'http://$OtherWiFi/carvings';
       _dio.options.responseType = ResponseType.json;
     }
     return _instance;

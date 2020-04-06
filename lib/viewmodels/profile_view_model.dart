@@ -41,7 +41,12 @@ class ProfileViewModel extends BaseModel {
     _orders = null;
     notifyListeners();
 
-    var result = await _foodService.getOrders(userId: _user.id, filter: _selectedFilter);
+    var result = await _foodService.getOrders(
+      userId: _user.role == 'User' ? _user.id : null, 
+      filter: _selectedFilter,
+      which: _user.role == 'User' ? null : 'Completed',
+    );
+    
     if(result is String) {
       _dialogService.showDialog(
         title: 'Error Occurred!',

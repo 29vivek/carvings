@@ -28,7 +28,6 @@ class ModifyViewModel extends BaseModel {
     _categories = {};
     for(var canteen in _canteens) {
       _categories[canteen.name] = canteen.categories;
-      print(_categories[canteen.name]);
     }
 
     if(food != null) {
@@ -93,6 +92,28 @@ class ModifyViewModel extends BaseModel {
       _navigationService.goBack();
     }
 
+  }
+
+  void deleteFood(int foodId) async {
+    
+    var response = await _dialogService.showConfirmationDialog(
+      title: 'Delete food item?',
+      description: 'This item will be irreveresably deleted.',
+      confirmationTitle: 'Did I stutter?',
+      cancelTitle: 'No',
+    );
+
+    if(response.confirmed) {
+      var result = await _foodService.deleteFood(foodId);
+      if(result is String) {
+        _dialogService.showDialog(
+          title: 'Error Occurred!',
+          description: result,
+        );
+      } else {
+        _navigationService.goBack();
+      }
+    }
   }
 
 

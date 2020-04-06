@@ -1,6 +1,7 @@
 import 'package:carvings/ui/shared/shared_styles.dart';
 import 'package:carvings/ui/widgets/food_card.dart';
 import 'package:carvings/ui/widgets/loading_card.dart';
+import 'package:carvings/ui/widgets/note_text.dart';
 import 'package:carvings/viewmodels/canteen_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,7 +21,7 @@ class CanteenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelProvider<CanteenViewModel>.withConsumer(
       viewModel: CanteenViewModel(),
-      onModelReady: (model) => model.getFoodItems(canteenIndex),
+      onModelReady: (model) => model.findRole(canteenIndex),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
         body: RefreshIndicator(
@@ -51,28 +52,39 @@ class CanteenView extends StatelessWidget {
                             ),
                           );
                         },
-                        content: Column(
-                          children: <Widget>[
-                            GridView.count(
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              crossAxisCount: 2,
-                              childAspectRatio: smartAspectRatio(context),
-                              mainAxisSpacing: 25, // verticalSpaceMedium
-                              crossAxisSpacing: 25,
-                              children: List.generate(model.food.values.elementAt(category).length, (index) => index)
-                                .map((foodIndex) => FoodCard(
-                                  food: model.food.values.elementAt(category)[foodIndex], 
-                                  onPressed: () {
-                                    model.addToCart(model.food.values.elementAt(category)[foodIndex]);
-                                  },
-                                  onLongPressed: () {
-                                    model.role == 'User' 
-                                    ? model.addToFavourites(model.food.values.elementAt(category)[foodIndex])
-                                    : model.editFood(model.food.values.elementAt(category)[foodIndex]);
-                                  }
-                                )).toList()
-                            ),
+                        content: model.food.values.elementAt(category).length > 0
+                        ? Column(
+                            children: <Widget>[
+                              GridView.count(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                crossAxisCount: 2,
+                                childAspectRatio: smartAspectRatio(context),
+                                mainAxisSpacing: 25, // verticalSpaceMedium
+                                crossAxisSpacing: 25,
+                                children: List.generate(model.food.values.elementAt(category).length, (index) => index)
+                                  .map((foodIndex) => FoodCard(
+                                    food: model.food.values.elementAt(category)[foodIndex], 
+                                    onPressed: () => model.role == 'User'
+                                      ? model.addToCart(model.food.values.elementAt(category)[foodIndex])
+                                      : null,
+                                    onDoubleTap: () => model.role == 'User'
+                                      ? null
+                                      : model.toggleAvailability(model.food.values.elementAt(category)[foodIndex]),
+                                    onLongPressed: () {
+                                      model.role == 'User' 
+                                      ? model.addToFavourites(model.food.values.elementAt(category)[foodIndex])
+                                      : model.editFood(model.food.values.elementAt(category)[foodIndex]);
+                                    }
+                                  )).toList()
+                              ),
+                              topSpacedDivider,
+                            ],
+                          )
+                        : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            NoteText('No food items present in this category, yet! Upcoming..'),
                             topSpacedDivider,
                           ],
                         ),

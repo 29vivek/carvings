@@ -5,6 +5,7 @@ import 'package:carvings/ui/shared/ui_helpers.dart';
 import 'package:carvings/ui/widgets/busy_button.dart';
 import 'package:carvings/ui/widgets/expansion_list.dart';
 import 'package:carvings/ui/widgets/input_field.dart';
+import 'package:carvings/ui/widgets/text_link.dart';
 import 'package:carvings/viewmodels/modify_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -33,6 +34,9 @@ class ModifyView<T> extends StatelessWidget {
         body: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          onPanDown: (_) {
             FocusScope.of(context).unfocus();
           },
           child: Padding(
@@ -72,14 +76,27 @@ class ModifyView<T> extends StatelessWidget {
                         ),
                       ],
                     ),
+                if(item is Food)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      verticalSpaceMedium,
+                      Text('This item has ${(item as Food).rating} stars currently based on ${(item as Food).numberRatings} ratings.', style: infoTextStyle,),
+                      verticalSpaceMedium,
+                      TextLink(
+                        'Delete this item permanently', 
+                        onPressed: () => model.deleteFood((item as Food).id)
+                      ),
+                    ],
+                  ),
                 verticalSpaceMedium,
                 Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     BusyButton(
                       busy: model.busy,
-                      title: item == null ? 'Add' : 'Update', 
+                      title: item == null ? 'Add Food' : 'Update', 
                       onPressed: item == null 
                           ? () => model.modifyFood(_controllerOne.text, _controllerTwo.text, 0)
                           : () => item is Food ? model.modifyFood(_controllerOne.text, _controllerTwo.text, (item as Food).id) : model.updateCanteenInfo(_controllerOne.text, _controllerTwo.text, (item as Canteen).id),                         

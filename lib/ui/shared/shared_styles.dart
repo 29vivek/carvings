@@ -22,7 +22,7 @@ const double inputFieldBottomMargin = 30;
 const double inputFieldSmallBottomMargin = 0;
 const EdgeInsets fieldPadding = const EdgeInsets.symmetric(horizontal: 15);
 const EdgeInsets largeFieldPadding =
-    const EdgeInsets.symmetric(horizontal: 15, vertical: 15);
+    const EdgeInsets.symmetric(horizontal: 12, vertical: 12);
 const EdgeInsets massiveFieldPadding = 
     const EdgeInsets.symmetric(horizontal: 20, vertical: 20);
 

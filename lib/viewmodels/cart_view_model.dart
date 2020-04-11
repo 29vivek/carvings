@@ -30,6 +30,9 @@ class CartViewModel extends BaseModel {
   void placeOrder() async {
 
     setBusy(true);
+    _cartItems = null;
+    _cartItems = await _databaseService.getCartItems();
+    // or else the quantity wont be updated
 
     Map<String, dynamic> bundle = {
       'user' : _authenticationService.currentUser.id,
@@ -66,7 +69,7 @@ class CartViewModel extends BaseModel {
   }
 
   void updateCartItem(int i, int value) async {
-
+    print('value is: $value');
     await _databaseService.updateCartItemQuantity(_cartItems[i].foodId, value);
     notifyListeners();
 

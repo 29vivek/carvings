@@ -54,7 +54,7 @@ class DatabaseService {
     ''');
     await db.execute('''
       CREATE TABLE $_cartTable (
-        FoodID INTEGER,
+        FoodID INTEGER PRIMARY KEY,
         Name TEXT,
         Price INTEGER,        
         Quantity INTEGER,

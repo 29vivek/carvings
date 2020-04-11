@@ -1,4 +1,3 @@
-import 'package:carvings/models/canteen.dart';
 import 'package:carvings/ui/views/canteen_view.dart';
 import 'package:carvings/ui/views/category_view.dart';
 import 'package:carvings/ui/views/home_view.dart';

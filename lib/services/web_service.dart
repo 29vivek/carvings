@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:carvings/constants/addresses.dart';
 import 'package:dio/dio.dart';
 
@@ -15,7 +13,7 @@ class WebService {
     }
     if(_dio == null) {
       _dio = Dio();
-      _dio.options.baseUrl = 'http://$OtherWiFi/carvings';
+      _dio.options.baseUrl = 'http://$PhoneWiFi/carvings';
       _dio.options.responseType = ResponseType.json;
     }
     return _instance;

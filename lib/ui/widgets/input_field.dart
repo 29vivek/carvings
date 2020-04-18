@@ -74,7 +74,7 @@ class _InputFieldState extends State<InputField> {
                       widget.formatter != null ? [widget.formatter] : null,
                   onEditingComplete: () {
                     if (widget.enterPressed != null) {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      FocusScope.of(context).unfocus();
                       widget.enterPressed();
                     }
                   },

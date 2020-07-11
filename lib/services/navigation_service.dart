@@ -6,7 +6,7 @@ class NavigationService {
     return Get.toNamed(routeName, arguments: arguments);
   }
 
-  bool goBack() {
+  void goBack() {
     return Get.back();
   }
 

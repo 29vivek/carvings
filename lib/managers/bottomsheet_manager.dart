@@ -36,9 +36,7 @@ class _BottomSheetManagerState extends State<BottomSheetManager> {
 
   void _showSheet(SheetRequest request) {
     var isEditSheet = request.rating == null;
-    Get.bottomSheet(
-      builder: (context) {
-        return SheetContent(
+    Get.bottomSheet(SheetContent(
           child: isEditSheet 
             ? SheetEdit(
                 request: request, 
@@ -52,8 +50,7 @@ class _BottomSheetManagerState extends State<BottomSheetManager> {
                   _bottomSheetService.sheetComplete(SheetResponse(number: quantity, confirmed: true));
                 },
               )
-        );
-      },
+        ),
     );
   }
 

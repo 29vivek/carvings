@@ -33,21 +33,29 @@ class _DialogManagerState extends State<DialogManager> {
 
   void _showDialog(DialogRequest request) {
     var isConfirmationDialog = request.cancelTitle != null;
-    Get.defaultDialog(
-      title: request.title,
-      content: Text(request.description),
-      cancel: isConfirmationDialog ? FlatButton(
-        child: Text(request.cancelTitle),
-        onPressed: () {
-          _dialogService.dialogComplete(DialogResponse(confirmed: false));
-        },
-      ) : null,
-      confirm: FlatButton(
+    var actions = <Widget>[];
+    if(isConfirmationDialog) {
+      actions.add(
+        FlatButton(
+          child: Text(request.cancelTitle),
+          onPressed: () {
+            _dialogService.dialogComplete(DialogResponse(confirmed: false));
+          },
+        ));
+    }
+    actions.add(
+      FlatButton(
         child: Text(request.buttonTitle),
         onPressed: () {
           _dialogService.dialogComplete(DialogResponse(confirmed: true));
         },
-      ),
+    ));
+    Get.dialog(
+      AlertDialog(
+        title: Text(request.title),
+        content: Text(request.description),
+        actions: actions,
+      )
     );
   }
 }

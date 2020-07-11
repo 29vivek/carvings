@@ -4,10 +4,10 @@ A cross platform application for ordering food at RVCE.
 
 ## Getting Started
 
-Place these [backend files](https://github.com/29vivek/carvings_backend/) at <localhost_directory>/carvings/
-Import *carvings.sql* into phpMyAdmin and modify *connect.php* accordingly.
-Make an addresses.dart file under carvings/lib/constants/ and specify your IP address for localhost.
-Use that variable in carvings/lib/services/web_service.dart to specify baseURL.
+Place these [backend files](https://github.com/29vivek/carvings_backend/) at <localhost_directory>/carvings/ <br />
+Import *carvings.sql* into phpMyAdmin and modify *connect.php* accordingly. <br />
+Make an addresses.dart file under carvings/lib/constants/ and specify your IP address for localhost. <br />
+Use that variable in carvings/lib/services/web_service.dart to specify baseURL. <br />
 
 ### Screenshots
 ![Login and Signup](screenshots/login_signup.png)

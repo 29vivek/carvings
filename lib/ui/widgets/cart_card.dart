@@ -42,46 +42,38 @@ class _CartCardState extends State<CartCard> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Flexible(
-            flex: 3,
-            fit: FlexFit.tight,
+          Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(widget.item.foodName, style: emphasizedMediumStyle,),
-                verticalSpaceSmall,
+                verticalSpaceTiny,
                 NoteText(widget.item.canteeenName),
+                verticalSpaceSmall,
+                Text('₹${widget.item.price * numberOfItems}', style: emphasizedMediumStyle,),
               ],
             ),
           ),
-          Flexible(
-            flex: 2,
-            fit: FlexFit.tight,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton(icon: FaIcon(FontAwesomeIcons.minus, size: 16), onPressed: () {
-                  setState(() {
-                    if(numberOfItems > 1)
-                      numberOfItems--;
-                  });
-                  widget.onChanged(numberOfItems);
-                }),
-                AnimatedCount(count: numberOfItems, duration: Duration(milliseconds: 300)),
-                IconButton(icon: FaIcon(FontAwesomeIcons.plus, size: 16), onPressed: () {
-                  setState(() {
-                    numberOfItems++;
-                  });
-                  widget.onChanged(numberOfItems);
-                }),
-              ],
-            ),
-          ),
-          Flexible(
-            flex: 1, 
-            fit: FlexFit.tight,
-            child: Text('₹${widget.item.price * numberOfItems}')
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              IconButton(icon: FaIcon(FontAwesomeIcons.minus, size: 12), onPressed: () {
+                setState(() {
+                  if(numberOfItems > 1)
+                    numberOfItems--;
+                });
+                widget.onChanged(numberOfItems);
+              }),
+              AnimatedCount(count: numberOfItems, duration: Duration(milliseconds: 300)),
+              IconButton(icon: FaIcon(FontAwesomeIcons.plus, size: 12), onPressed: () {
+                setState(() {
+                  numberOfItems++;
+                });
+                widget.onChanged(numberOfItems);
+              }),
+            ],
           ),
         ],  
       ),

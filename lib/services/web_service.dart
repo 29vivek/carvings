@@ -13,7 +13,7 @@ class WebService {
     }
     if(_dio == null) {
       _dio = Dio();
-      _dio.options.baseUrl = 'http://$PhoneWiFi/carvings';
+      _dio.options.baseUrl = 'http://$Emulator/carvings';
       _dio.options.responseType = ResponseType.json;
     }
     return _instance;

@@ -51,6 +51,7 @@ class _BottomSheetManagerState extends State<BottomSheetManager> {
                 },
               )
         ),
+        // isScrollControlled: true,
     );
   }
 

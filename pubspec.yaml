@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.9
   get_it: ^4.0.0
-  get: ^3.2.2
+  get: ^3.4.0
   provider_architecture: ^1.0.6
   flutter_platform_widgets: ^0.32.4
   shared_preferences: ^0.5.6+3

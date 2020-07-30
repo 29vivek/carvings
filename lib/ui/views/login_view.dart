@@ -18,51 +18,59 @@ class LoginView extends StatelessWidget {
       viewModel: LoginViewModel(),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: defaultPadding(context),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Carvings',
-                style: headerTextStyle,
-              ),
-              verticalSpaceLarge,
-              InputField(
-                placeholder: 'Email',
-                controller: emailController,
-                textInputType: TextInputType.emailAddress,
-              ),
-              verticalSpaceSmall,
-              InputField(
-                placeholder: 'Password',
-                password: true,
-                controller: passwordController,
-              ),
-              verticalSpaceMedium,
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  BusyButton(
-                    title: 'Login',
-                    busy: model.busy,
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Center(
+            child: SingleChildScrollView(
+              padding: defaultPadding(context),
+              child: Column(
+                // mainAxisSize: MainAxisSize.max,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Carvings',
+                    style: headerTextStyle,
+                  ),
+                  verticalSpaceLarge,
+                  InputField(
+                    placeholder: 'Email',
+                    controller: emailController,
+                    textInputType: TextInputType.emailAddress,
+                  ),
+                  verticalSpaceSmall,
+                  InputField(
+                    placeholder: 'Password',
+                    password: true,
+                    controller: passwordController,
+                  ),
+                  verticalSpaceMedium,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      BusyButton(
+                        title: 'Login',
+                        busy: model.busy,
+                        onPressed: () {
+                          model.login(email: emailController.text, password: passwordController.text);
+                        },
+                      )
+                    ],
+                  ),
+                  verticalSpaceMedium,
+                  TextLink(
+                    'Create an Account if you\'re new.',
                     onPressed: () {
-                      model.login(email: emailController.text, password: passwordController.text);
+                      model.navigateToSignUp();
                     },
                   )
                 ],
               ),
-              verticalSpaceMedium,
-              TextLink(
-                'Create an Account if you\'re new.',
-                onPressed: () {
-                  model.navigateToSignUp();
-                },
-              )
-            ],
+            ),
           ),
         ),
       )

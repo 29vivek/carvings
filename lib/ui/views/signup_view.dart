@@ -20,69 +20,75 @@ class SignUpView extends StatelessWidget {
       viewModel: SignUpViewModel(),
       builder: (context, model, child) => PlatformScaffold(
         backgroundColor: Colors.white,
-        body: LayoutBuilder(
-          builder: (context, viewPortConstraints) => SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewPortConstraints.maxHeight,
-              ),
-              child: Padding(
-                padding: defaultPadding(context),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                        'Sign Up',
-                        style: headerTextStyle,
-                    ),
-                    verticalSpaceLarge,
-                    InputField(
-                      controller: emailController, 
-                      placeholder: 'Email',
-                      textInputType: TextInputType.emailAddress,
-                    ),
-                    verticalSpaceSmall,
-                    InputField(
-                      controller: nameController,
-                      placeholder: 'Name',
-                      textInputType: TextInputType.text,
-                    ),
-                    verticalSpaceSmall,
-                    InputField(
-                      controller: numberController,
-                      placeholder: 'Number',
-                      textInputType: TextInputType.number,
-                      additionalNote: 'Enter a 10 digit phone number.',
-                    ),
-                    verticalSpaceSmall,
-                    InputField(
-                      controller: passwordController,
-                      placeholder: 'Password',
-                      password: true,
-                      additionalNote: 'Password must be atleast 6 characters long.',
-                    ),
-                    verticalSpaceMedium,
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        BusyButton(
-                          title: 'Sign Up',
-                          busy: model.busy,
-                          onPressed: () {
-                            // Perform sign up here
-                            model.signUp(
-                              email: emailController.text, name: nameController.text,
-                              number: numberController.text, password: passwordController.text,
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                )
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: LayoutBuilder(
+            builder: (context, viewPortConstraints) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewPortConstraints.maxHeight,
+                ),
+                child: Padding(
+                  padding: defaultPadding(context),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                          'Sign Up',
+                          style: headerTextStyle,
+                      ),
+                      verticalSpaceLarge,
+                      InputField(
+                        controller: emailController, 
+                        placeholder: 'Email',
+                        textInputType: TextInputType.emailAddress,
+                      ),
+                      verticalSpaceSmall,
+                      InputField(
+                        controller: nameController,
+                        placeholder: 'Name',
+                        textInputType: TextInputType.text,
+                      ),
+                      verticalSpaceSmall,
+                      InputField(
+                        controller: numberController,
+                        placeholder: 'Number',
+                        textInputType: TextInputType.number,
+                        additionalNote: 'Enter a 10 digit phone number.',
+                      ),
+                      verticalSpaceSmall,
+                      InputField(
+                        controller: passwordController,
+                        placeholder: 'Password',
+                        password: true,
+                        additionalNote: 'Password must be atleast 6 characters long.',
+                      ),
+                      verticalSpaceMedium,
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          BusyButton(
+                            title: 'Sign Up',
+                            busy: model.busy,
+                            onPressed: () {
+                              // Perform sign up here
+                              model.signUp(
+                                email: emailController.text, name: nameController.text,
+                                number: numberController.text, password: passwordController.text,
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ),
               ),
             ),
           ),
